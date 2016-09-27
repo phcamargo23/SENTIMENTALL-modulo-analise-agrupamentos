@@ -11,7 +11,6 @@
                         v.splice(1, 0, key.toString());
                         v[0] = v[0] + '(' + key.toString() + ')';
                         t.push(v);
-                        // console.log(v);
                     });
 
                 });
@@ -34,7 +33,25 @@
                         fontColor: 'black'
                     };
 
+                    var options = {
+                        minColor: '#e7711c',
+                        midColor: '#fff',
+                        maxColor: '#4374e0',
+                        showScale: true,
+                        generateTooltip: showFullTooltip
+                    };
+
                     tree.draw(data, options);
+
+                    function showFullTooltip(row, size, value) {
+                        return '<div style="background:#fd9; padding:10px; border-style:solid">' +
+                                '<span style="font-family:Courier"><b>' + data.getValue(row, 0) +
+                                '</b>, ' + data.getValue(row, 1) + ', ' + data.getValue(row, 2) +
+                                '</span><br>' +
+                                'Datatable row: ' + row + '<br>' +
+                                data.getColumnLabel(2) +' : ' + size + '<br>'+
+                            '</div>';
+                    }
 
                 }
 

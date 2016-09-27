@@ -52,14 +52,14 @@ def main():
     # listaDeAspectosDistintos = ['atendimento', 'comida', 'bar'];
     # dataset = [
     #     [1, 2, 2],
-    #     [1, 6, 3],
+    #     [1, 60, 3],
     #     [5, 8, 4],
     #     [5, 8, 5],
     #     [8, 8, 6],
-    #     [9, 9, 7]
+    #     [9, 9, 0]
     # ]
 
-    kmeans = KMeans(n_clusters=5)
+    kmeans = KMeans(n_clusters=2)
     kmeans.fit(dataset)
 
     centroids = kmeans.cluster_centers_
