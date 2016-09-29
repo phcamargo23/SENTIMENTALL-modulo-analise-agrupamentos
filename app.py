@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from flask import Flask, make_response, jsonify
+from flask import Flask, make_response
 import kmeans
 
 DIR = os.path.dirname(os.path.abspath(__file__))

@@ -9,15 +9,15 @@ from collections import OrderedDict
 DIR = os.path.dirname(os.path.abspath(__file__))
 app = Flask(__name__)
 
-inputHeader = ['aspectos', 'estado', 'cidade']
-input = pd.read_csv('C:\Users\Pedro Henrique\Downloads\\b.csv', delimiter=';', names=inputHeader );
+inputHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
+df = pd.read_csv('C:\Users\Pedro Henrique\Downloads\dataset.csv', delimiter=';', names=inputHeader);
 listaDeAspectosDistintos = []
 dataset = []
 
 def criarListaDeApectos():
     listaDeAspectos_str = ''
 
-    for aspectos in input.aspectos:
+    for aspectos in df.aspectos:
         listaDeAspectos_str += aspectos + ','
 
     listaDeAspectos = listaDeAspectos_str.split(',')
@@ -32,7 +32,7 @@ def criarListaDeApectos():
     # print listaDeAspectosDistintos
 
 def prepararDataset():
-    for aspectosDaAvaliacao in input.aspectos:
+    for aspectosDaAvaliacao in df.aspectos:
         row = []
         for aspecto in listaDeAspectosDistintos:
             if aspecto in aspectosDaAvaliacao.split(','):
@@ -42,23 +42,7 @@ def prepararDataset():
 
         dataset.append(row)
 
-def main():
-    criarListaDeApectos()
-    prepararDataset()
-
-    # print listaDeAspectosDistintos
-    # print dataset
-
-    # listaDeAspectosDistintos = ['atendimento', 'comida', 'bar'];
-    # dataset = [
-    #     [1, 2, 2],
-    #     [1, 60, 3],
-    #     [5, 8, 4],
-    #     [5, 8, 5],
-    #     [8, 8, 6],
-    #     [9, 9, 0]
-    # ]
-
+def analisar():
     kmeans = KMeans(n_clusters=2)
     kmeans.fit(dataset)
 
@@ -70,6 +54,28 @@ def main():
         Y.append(zip(listaDeAspectosDistintos, i))
 
     return json.dumps(Y)
+
+def analisarEstado():
+    for estado in df.estado.unique():
+        if df[df.estado == estado]:
+            print ''
+    # for index, row in df.iterrows():
+    #     print row['c1'], row['c2'
+
+def analisarCidade():
+    print #
+
+def analisarTipo():
+    print #
+
+def analisarObjeto():
+    print #
+
+
+def main():
+    # criarListaDeApectos()
+    # prepararDataset()
+    analisarEstado()
 
 if __name__ == '__main__':
     main()
