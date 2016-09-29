@@ -3,7 +3,7 @@
     angular.module('tcc', [])
         .controller('MainController', function ($scope, $http, $filter, $interval, $timeout) {
 
-            $http.get('/kmeans').success(function (dados) {
+            $http.get('/analisar?k=3').success(function (dados) {
                 t = [];
                 angular.forEach(dados, function (value, key) { //Percorre clusters
                     t.unshift([key.toString(), 'clusters', 0]);

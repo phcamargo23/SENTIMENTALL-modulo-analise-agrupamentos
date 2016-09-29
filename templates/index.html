@@ -2,13 +2,18 @@
 <html lang="pt-br" ng-app="tcc">
 <head>
     <meta charset="UTF-8">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <title>TCC</title>
 </head>
 <body ng-controller="MainController">
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <select class="form-control" ng-model="cidade.estado.uf">
+        <option ng-repeat="estado in estados" value="{{estado.uf}}">{{estado.nome}}</option>
+    </select>
+<div id="chart_div" style="width: 900px; height: 500px;"></div>
 </body>
 <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="static/app.js"></script>
 </html>
