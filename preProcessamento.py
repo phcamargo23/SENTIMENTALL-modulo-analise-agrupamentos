@@ -5,79 +5,85 @@ import pandas as pd
 DIR = os.path.dirname(os.path.abspath(__file__))
 
 dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-df = pd.read_csv('C:\Users\Pedro Henrique\Downloads\dataset.csv', delimiter=';', names=dfHeader);
+df = pd.read_csv('C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv', delimiter=';', names=dfHeader);
 # listaDeAspectosDistintos = []
 
 
 def extrairCaracteristicas(subconjunto):
-    # aspectos = []
-    # aspectos.append(dataset_estado.aspectos.str.split(','))
-    # print aspectos
-
-    listaDeAspectos_str = ''
-    listaDeAspectosDistintos = []
+    listaDeAspectos = set()
+    # listaDeAspectos = pd.DataFrame()
 
     for aspectos in subconjunto.aspectos:
-        listaDeAspectos_str += aspectos + ','
+        for aspecto in aspectos.split(','):
+            listaDeAspectos.add(aspecto)
+            # listaDeAspectos[aspecto] = pd.Series();
 
-    listaDeAspectos = listaDeAspectos_str.split(',')
-    listaDeAspectos.pop()
+    return listaDeAspectos
 
-    for aspecto in listaDeAspectos:
-        if aspecto not in listaDeAspectosDistintos:
-            listaDeAspectosDistintos.append(aspecto)
-
-    return listaDeAspectosDistintos
-
-    # print listaDeAspectos;
-    # print listaDeAspectosDistintos
+    # listaDeAspectos_str = ''
+    # listaDeAspectosDistintos = []
+    #
+    # for aspectos in subconjunto.aspectos:
+    #     listaDeAspectos_str += aspectos + ','
+    #
+    # listaDeAspectos = listaDeAspectos_str.split(',')
+    # listaDeAspectos.pop()
+    #
+    # for aspecto in listaDeAspectos:
+    #     if aspecto not in listaDeAspectosDistintos:
+    #         listaDeAspectosDistintos.append(aspecto)
+    #
+    # return listaDeAspectosDistintos
+    #
+    # # print listaDeAspectos;
+    # # print listaDeAspectosDistintos
 
 
 
 
 def transformarConjuntoDeDados(caracteristicas, subconjunto):
-    valores = []
+#     valores = []
+#
+#     for aspecto in caracteristicas:
+#         for avaliacao in subconjunto.aspectos:
+#             if aspecto in avaliacao:
+#                 valores.append(1)
+#             else:
+#                 valores.append(0)
+#
+#         caracteristicas[aspecto].append(valores);
 
-    for aspectosDaAvaliacao in subconjunto.aspectos:
-        registro = []
+
+    dataframe = pd.DataFrame(columns=caracteristicas)
+
+    for avaliacao in subconjunto.aspectos:
+        valores = []
         for aspecto in caracteristicas:
-            if aspecto in aspectosDaAvaliacao.split(','):
-                registro.append(1)
+            if aspecto in avaliacao.split(','):
+                valores.append(1)
             else:
-                registro.append(0)
+                valores.append(0)
 
-        valores.append(registro)
+        dataframe.loc[len(dataframe)] = valores
 
-    return valores
+    return dataframe
 
 
-def fragmentarConjuntoDeDados():
-    # TODO: ARQUIVO SEM FORMATO BOOM
-    conjuntoDeDadosDeTodosOsNiveis = []
+def preProcessar(nivel):
+    dicionario = []
 
-    # POR ESTADO
-    conjuntosDeDados = []
-
-    for estado in df.estado.unique():
-        subconjunto = df[df.estado == estado]
+    for estado in nivel.unique():
+        subconjunto = df[nivel == estado]
         caracteristicas = extrairCaracteristicas(subconjunto)
         subconjuntoTransformado = transformarConjuntoDeDados(caracteristicas, subconjunto)
-        conjuntosDeDados.append(subconjuntoTransformado);
+        dicionario.append({estado:subconjuntoTransformado});
 
-    conjuntoDeDadosDeTodosOsNiveis.append(conjuntosDeDados);
+    return dicionario
 
-    # POR CIDADE
-    conjuntosDeDados = []
-
-    for cidade in df.cidade.unique():
-        subconjunto = df[df.cidade == cidade]
-        caracteristicas = extrairCaracteristicas(subconjunto)
-        subconjuntoTransformado = transformarConjuntoDeDados(caracteristicas, subconjunto)
-        conjuntosDeDados.append(subconjuntoTransformado);
-
-    conjuntoDeDadosDeTodosOsNiveis.append(conjuntosDeDados);
-
-    return conjuntoDeDadosDeTodosOsNiveis
 
 def processar():
-    return fragmentarConjuntoDeDados()
+    # TODO: ARQUIVO SEM FORMATO BOOM
+    return {'estados':preProcessar(df.estado),'cidades':preProcessar(df.cidade),'tipos':preProcessar(df.tipo),'objetos':preProcessar(df.objeto)}
+
+# if __name__ == '__main__':
+#     processar()

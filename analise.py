@@ -10,9 +10,8 @@ def kmeans(conjuntoDeDados, k):
     return centroids
 
 def processar(conjuntoDeDados, k):
-    # POR ESTADO
-    for estado in conjuntoDeDados[0]:
-        print kmeans(estado, k)
+    for estado in conjuntoDeDados['estados']:
+        print kmeans(list(estado.values()[0].values), k)
 
 if __name__ == '__main__':
     processar()
