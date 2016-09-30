@@ -21,13 +21,13 @@ def index():
 @app.route('/analisar')
 def main():
     # k = int(request.args.get('k'))
-    k=3
+    k=2
     conjuntoDeDadosDeTodosOsNiveis = preProcessamento.processar();
     resultadoDeTodosOsNiveis = analise.processar(conjuntoDeDadosDeTodosOsNiveis, k)
 
     x=0
     # print conjuntoDeDadosDeTodosOsNiveis
-    # print resultadoDeTodosOsNiveis
+    print resultadoDeTodosOsNiveis
 
     # return json.dumps(conjuntoDeDadosDeTodosOsNiveis)
     # return analisarConjuntoDeDados.main()

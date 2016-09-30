@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import pandas as pd
+import numpy as np
 
 DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -42,30 +43,34 @@ def extrairCaracteristicas(subconjunto):
 
 
 def transformarConjuntoDeDados(caracteristicas, subconjunto):
-#     valores = []
+#     valor = []
 #
 #     for aspecto in caracteristicas:
 #         for avaliacao in subconjunto.aspectos:
 #             if aspecto in avaliacao:
-#                 valores.append(1)
+#                 valor.append(1)
 #             else:
-#                 valores.append(0)
+#                 valor.append(0)
 #
-#         caracteristicas[aspecto].append(valores);
+#         caracteristicas[aspecto].append(valor);
 
 
     dataframe = pd.DataFrame(columns=caracteristicas)
+    resultado = []
 
     for avaliacao in subconjunto.aspectos:
-        valores = []
+        valor = []
         for aspecto in caracteristicas:
             if aspecto in avaliacao.split(','):
-                valores.append(1)
+                valor.append(1)
             else:
-                valores.append(0)
+                valor.append(0)
 
-        dataframe.loc[len(dataframe)] = valores
+        resultado.append(valor);
 
+    # dataframe.loc[len(dataframe)] = np.array(resultado)
+    dataframe = pd.DataFrame(data=np.array(resultado), columns=caracteristicas)
+    # return np.array(resultado)
     return dataframe
 
 
