@@ -2,36 +2,63 @@
 
     angular.module('tcc', [])
         .controller('MainController', function ($scope, $http, $filter, $interval, $timeout) {
+            // var dados;
+            // $scope.estado = 'PE'
 
-            $http.get('/analisar?k=3').success(function (dados) {
-                t = [];
-                angular.forEach(dados, function (value, key) { //Percorre clusters
-                    t.unshift([key.toString(), 'clusters', 0]);
-                    angular.forEach(value, function (v, k) { //Percorre aspecto/centroides
-                        v.splice(1, 0, key.toString());
-                        v[0] = v[0] + '(' + key.toString() + ')';
-                        t.push(v);
-                    });
+            $scope.mostrarResultado = function () {
+                if($scope.objeto == null && $scope.cidade == null && $scope.estado != null){
+                    console.log('estado: '+$scope.estado);
+                    visualizar($scope.estado.resultado);
 
-                });
+                }else if($scope.objeto == null && $scope.cidade != null) {
+                    console.log('cidade: ' + $scope.cidade);
+                    visualizar($scope.cidade.resultado);
 
-                t.unshift(['clusters', null, 0]);
-                t.unshift(['cluster', 'pai', 'centroide']);
+                }else if($scope.objeto != null) {
+                    console.log('objeto: ' + $scope.objeto);
+                    visualizar($scope.objeto.resultado);
 
+                }else alert('Selecione uma visualização');
+
+            }
+
+            // $scope.listarCidades = function (estado) {
+            //     // console.log(estado);
+            //     // console.log($scope.estados)
+            //     // console.log($scope.estados[estado])
+            //     // console.log($scope.estados.estado);
+            //     $scope.cidades = estado;
+            // }
+
+            $http.get('/analisar?k=3').success(function (resultado) {
+                // dados = resultado;
+                $scope.estados = resultado;
+                // $scope.cidades = dados[$scope.estado];
+                // console.log($scope.estados);
+                // $scope.cidades = dados['cidades']
+                // $scope.objetos = dados['objetos']
+
+                // var items = [];
+                // Object.keys(dados).forEach(function(key) {
+                //   items.push({key: key, value: dados[key]});
+                // });
+                // console.log(items);
+
+                // visualizar(dados['estados'][$scope.estado])
+            });
+
+            function visualizar(dados) {
+                if(dados == null){
+                    alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+                    // google.charts.clearChart;
+                    // return;
+                }
                 google.charts.load('current', {'packages': ['treemap']});
                 google.charts.setOnLoadCallback(drawChart);
                 function drawChart() {
-                    var data = google.visualization.arrayToDataTable(t);
+                    var data = new google.visualization.arrayToDataTable(dados);
 
                     tree = new google.visualization.TreeMap(document.getElementById('chart_div'));
-
-                    var options = {
-                        minColor: '#f00',
-                        midColor: '#ddd',
-                        maxColor: '#0d0',
-                        headerHeight: 15,
-                        fontColor: 'black'
-                    };
 
                     var options = {
                         minColor: '#e7711c',
@@ -45,18 +72,16 @@
 
                     function showFullTooltip(row, size, value) {
                         return '<div style="background:#fd9; padding:10px; border-style:solid">' +
-                                '<span style="font-family:Courier"><b>' + data.getValue(row, 0) +
-                                '</b>, ' + data.getValue(row, 1) + ', ' + data.getValue(row, 2) +
-                                '</span><br>' +
-                                'Datatable row: ' + row + '<br>' +
-                                data.getColumnLabel(2) +' : ' + size + '<br>'+
+                            '<span style="font-family:Courier"><b>' + data.getValue(row, 0) +
+                            '</b>, ' + data.getValue(row, 1) + ', ' + data.getValue(row, 2) +
+                            '</span><br>' +
+                            'Datatable row: ' + row + '<br>' +
+                            data.getColumnLabel(2) + ' : ' + size + '<br>' +
                             '</div>';
                     }
 
                 }
+            }
 
-
-            });
-            // };
         });
 })();
