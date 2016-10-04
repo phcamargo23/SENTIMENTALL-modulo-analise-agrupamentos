@@ -2,36 +2,48 @@
 import os
 from flask import Flask, make_response, request, json
 import pandas as pd
-import preProcessamento
-import analise
+import processamento
+from sklearn.cluster import KMeans
 
 app = Flask(__name__)
+DIR = os.path.dirname(os.path.abspath(__file__))
 
-# tudo = {'estados':{'TO':pd.DataFrame()}}
-# tudo = {'estados':{'SP':pd.DataFrame()}}
-
-# dfTodosNiveis = pd.DataFrame()
-# dfTodosNiveis['estados'] = pd.Series();
-# dfTodosNiveis['estados']['cidades'];
+dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
+df = pd.read_csv('C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv', delimiter=';', names=dfHeader);
 
 @app.route('/')
 def index():
     return make_response(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates/index.html')).read())
 
+
 @app.route('/analisar')
 def main():
-    # k = int(request.args.get('k'))
-    k=2
-    conjuntoDeDadosDeTodosOsNiveis = preProcessamento.processar();
-    resultadoDeTodosOsNiveis = analise.processar(conjuntoDeDadosDeTodosOsNiveis, k)
+    k = int(request.args.get('k'))
+    saidaEstado = {}
 
-    x=0
-    # print conjuntoDeDadosDeTodosOsNiveis
-    print resultadoDeTodosOsNiveis
+    for e in df.estado.unique():
+        subconjuntoEstado = df[df.estado == e]
+        saidaEstado[e] = {'resultado':processamento.processar(subconjuntoEstado, k)}
 
-    # return json.dumps(conjuntoDeDadosDeTodosOsNiveis)
-    # return analisarConjuntoDeDados.main()
+        saidaCidade = {}
+
+        for c in subconjuntoEstado.cidade.unique():
+            subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c];
+            saidaCidade[c] = {'resultado': processamento.processar(subconjuntoCidade, k)}
+
+            saidaObjeto = {};
+
+            for o in subconjuntoCidade.objeto.unique():
+                subconjuntoObjeto = subconjuntoCidade[subconjuntoCidade.objeto == o];
+                saidaObjeto[o] = {'resultado': processamento.processar(subconjuntoObjeto, k)};
+
+            saidaCidade[c].update(saidaObjeto);
+
+        saidaEstado[e].update(saidaCidade);
+
+    # print json.dumps(saidaEstado)
+    return json.dumps(saidaEstado)
 
 if __name__ == '__main__':
-    # app.run()
-    main()
+    app.run()
+    # main()
