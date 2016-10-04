@@ -2,7 +2,10 @@
 <html lang="pt-br" ng-app="tcc">
 <head>
     <meta charset="UTF-8">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="static/bootstrap/dist/css/bootstrap.min.css"/>
+    <!-- ANGULAR  -->
+    <link rel="stylesheet" href="static/angular-loading-bar/build/loading-bar.min.css"/>
     <!-- CUSTOM -->
     <link rel="stylesheet" href="static/style.css"/>
     <title>TCC</title>
@@ -34,8 +37,6 @@
                 </form>
             </div>
         </div>
-    </div>
-    <div class="starter-template">
         <div class="row">
             <div class="col-lg-12" style="text-align: center">
                 <form class="form-inline">
@@ -64,21 +65,37 @@
                 </form>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <div>
-                    <div class="col-lg-12">
-                        <div id="chart_div" style="width: auto; height: 580px;"></div>
-                    </div>
-                </div>
+        <ul class="nav nav-pills">
+            <li class="active">
+                <a href="#1b" data-toggle="tab">K-means</a>
+            </li>
+            <li><a href="#2b" data-toggle="tab">DBSCAN</a>
+            </li>
+            <li><a href="#3b" data-toggle="tab">LDA</a>
+        </ul>
+
+        <div class="tab-content clearfix">
+            <div class="tab-pane active" id="1b">
+                <div id="chart_div" style="width: auto; height: 580px;"></div>
+            </div>
+            <div class="tab-pane" id="2b">
+            </div>
+            <div class="tab-pane" id="3b">
             </div>
         </div>
     </div>
 </div>
 </body>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- JQUERY -->
+<script src="static/jquery/dist/jquery.min.js"></script>
+<!-- BOOTSTRAP -->
+<script src="static/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- ANGULAR  -->
+<script src="static/angular/angular.min.js"></script>
+<script src="static/angular-animate/angular-animate.min.js"></script>
+<script src="static/angular-loading-bar/build/loading-bar.min.js"></script>
+<!-- GOOGLE CHARTS-->
+<script type="text/javascript" src="static/google-charts/loader.js"></script>
+<!-- CUSTOM -->
 <script src="static/app.js"></script>
 </html>

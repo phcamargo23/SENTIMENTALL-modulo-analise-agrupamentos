@@ -1,11 +1,12 @@
 (function () {
 
-    angular.module('tcc', [])
-        .controller('MainController', function ($scope, $http, $filter, $interval, $timeout) {
+    angular.module('tcc', ['angular-loading-bar'])
+        .controller('MainController', function ($scope, $http) {
 
             $scope.analisar = function () {
                 $http.get('/analisar?k=' + $scope.k).success(function (resultado) {
                     $scope.estados = resultado;
+                    // console.log('teste');
                     // var items = [];
                     // Object.keys(dados).forEach(function(key) {
                     //   items.push({key: key, value: dados[key]});
@@ -16,15 +17,15 @@
             $scope.mostrarResultado = function () {
                 if ($scope.objeto == null && $scope.cidade == null && $scope.estado != null) {
                     console.log('estado: ' + $scope.estado);
-                    gerarVisualizacaoTreeMap($scope.estado.resultado);
+                    gerarVisualizacaoTreeMap($scope.estado.kmeans);
 
                 } else if ($scope.objeto == null && $scope.cidade != null) {
                     console.log('cidade: ' + $scope.cidade);
-                    gerarVisualizacaoTreeMap($scope.cidade.resultado);
+                    gerarVisualizacaoTreeMap($scope.cidade.kmeans);
 
                 } else if ($scope.objeto != null) {
                     console.log('objeto: ' + $scope.objeto);
-                    gerarVisualizacaoTreeMap($scope.objeto.resultado);
+                    gerarVisualizacaoTreeMap($scope.objeto.kmeans);
 
                 } else alert('Selecione uma visualização');
 

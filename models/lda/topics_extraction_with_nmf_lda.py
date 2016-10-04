@@ -2,9 +2,7 @@
 from __future__ import print_function
 from time import time
 
-from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.decomposition import LatentDirichletAllocation
-from sklearn.datasets import fetch_20newsgroups
 
 n_samples = 2000
 n_features = 1000

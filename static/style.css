@@ -1,0 +1,15 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 10px 15px;
+  /*text-align: center;*/
+}
+
+.selected{
+  background-color: #8dd189 ! important;
+}
+
+.table td, tr, th {
+  text-align: center;
+}

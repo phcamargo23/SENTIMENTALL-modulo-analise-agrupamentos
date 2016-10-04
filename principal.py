@@ -8,9 +8,6 @@ from sklearn.cluster import KMeans
 app = Flask(__name__)
 DIR = os.path.dirname(os.path.abspath(__file__))
 
-dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-df = pd.read_csv('C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv', delimiter=';', names=dfHeader);
-
 @app.route('/')
 def index():
     return make_response(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates/index.html')).read())
@@ -19,23 +16,32 @@ def index():
 @app.route('/analisar')
 def main():
     k = int(request.args.get('k'))
+    # k = 3
+
+    dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
+    df = pd.read_csv('C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv', delimiter=';', names=dfHeader);
+
     saidaEstado = {}
 
     for e in df.estado.unique():
         subconjuntoEstado = df[df.estado == e]
-        saidaEstado[e] = {'resultado':processamento.processar(subconjuntoEstado, k)}
+        saidaEstado[e] = {'kmeans':processamento.processarKmeans(subconjuntoEstado, k)}
 
         saidaCidade = {}
 
         for c in subconjuntoEstado.cidade.unique():
             subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c];
-            saidaCidade[c] = {'resultado': processamento.processar(subconjuntoCidade, k)}
+            saidaCidade[c] = {'kmeans': processamento.processarKmeans(subconjuntoCidade, k)}
 
             saidaObjeto = {};
 
             for o in subconjuntoCidade.objeto.unique():
-                subconjuntoObjeto = subconjuntoCidade[subconjuntoCidade.objeto == o];
-                saidaObjeto[o] = {'resultado': processamento.processar(subconjuntoObjeto, k)};
+                subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o];
+                saidaObjeto[o] = {
+                        'kmeans': processamento.processarKmeans(subconjunto_objeto, k)
+                        # 'dbscan': processamento.processarDBSCAN(subconjunto_objeto, 0, 0),
+                        # 'lda': processamento.processarLDA(subconjunto_objeto, k)
+                };
 
             saidaCidade[c].update(saidaObjeto);
 
