@@ -13,7 +13,7 @@ def kmeans(conjunto_de_dados, k):
 
 
 def LDA(conjunto_de_dados, n_topicos):
-    lda = LatentDirichletAllocation(n_topics=n_topicos, max_iter=5,
-                                    learning_method='online', learning_offset=50.,
-                                    random_state=0)
-    return lda
+    lda = LatentDirichletAllocation(n_topics=n_topicos)
+    lda.fit(conjunto_de_dados)
+
+    return lda.components_
