@@ -11,8 +11,11 @@ app = Flask(__name__)
 directory = None
 
 def analisar(k):
+    eps = 1
+    minPts = 5
+
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-    filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv'
+    filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset0.csv'
 
     directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
 
@@ -36,8 +39,8 @@ def analisar(k):
             subconjuntoEstado = df[df.estado == e]
             saidaEstado[e] = {
                         'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
-                        'lda': processamento.processarLDA(subconjuntoEstado, k)
-                        # 'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
+                        'lda': processamento.processarLDA(subconjuntoEstado, k),
+                        'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
                     }
 
             saidaCidade = {}
@@ -46,8 +49,8 @@ def analisar(k):
                 subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c];
                 saidaCidade[c] = {
                         'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
-                        'lda': processamento.processarLDA(subconjuntoCidade, k)
-                        # 'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
+                        'lda': processamento.processarLDA(subconjuntoCidade, k),
+                        'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
                     }
 
                 saidaObjeto = {};
@@ -56,8 +59,8 @@ def analisar(k):
                     subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o];
                     saidaObjeto[o] = {
                         'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
-                        'lda': processamento.processarLDA(subconjunto_objeto, k)
-                        # 'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
+                        'lda': processamento.processarLDA(subconjunto_objeto, k),
+                        'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                     }
 
                 saidaCidade[c].update(saidaObjeto);
@@ -103,8 +106,8 @@ def consultarResultado():
 
 @app.route('/iniciar-analise')
 def main():
-    k = int(request.args.get('k'))
-    # k = 2
+    # k = int(request.args.get('k'))
+    k = 2
     t = Thread(target=analisar, args=[k])
     t.start()
     return 'Análise iniciada!'
