@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 directory = None
 
-filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv'
+filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset0.csv'
 
 def naoFragmentado_todasAnalises(k):
     eps = 1
@@ -265,6 +265,37 @@ def fragmentado_semAnalises(k, chunksize=10 ** 4):
     # os.rename(directory, directory[:-8]) #remover '.pending'
 
 if __name__ == '__main__':
+    print('fragmentado_semAnalises 2')
+    start_time = time.time()
+    fragmentado_semAnalises(3, 10 ** 2)
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+    print '\n'
+
+    print('fragmentado_semAnalises 4')
+    start_time = time.time()
+    fragmentado_semAnalises(3, 10 ** 4)
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+    print '\n'
+
+    print('fragmentado_semAnalises 6')
+    start_time = time.time()
+    fragmentado_semAnalises(3, 10 ** 6)
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+    print '\n'
+
+    print('naoFragmentado_semAnalises')
+    start_time = time.time()
+    naoFragmentado_semAnalises(3)
+    print("--- %s seconds ---" % (time.time() - start_time))
+
+
+    print '\n'
+    print '\n'
+
+
     print('fragmentado_todasAnalises 2')
     start_time = time.time()
     fragmentado_todasAnalises(3, 10 ** 2)
@@ -291,32 +322,5 @@ if __name__ == '__main__':
     naoFragmentado_todasAnalises(3)
     print("--- %s seconds ---" % (time.time() - start_time))
 
-    print '\n'
-    print '\n'
 
-    print('fragmentado_semAnalises 2')
-    start_time = time.time()
-    fragmentado_semAnalises(3, 10 ** 2)
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-    print '\n'
-
-    print('fragmentado_semAnalises 4')
-    start_time = time.time()
-    fragmentado_semAnalises(3, 10 ** 4)
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-    print '\n'
-
-    print('fragmentado_semAnalises 6')
-    start_time = time.time()
-    fragmentado_semAnalises(3, 10 ** 6)
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-    print '\n'
-
-    print('naoFragmentado_semAnalises')
-    start_time = time.time()
-    naoFragmentado_semAnalises(3)
-    print("--- %s seconds ---" % (time.time() - start_time))
 
