@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 directory = None
 
-filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset3.csv'
+filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv'
 
 def naoFragmentado_todasAnalises(k):
     eps = 1
@@ -19,10 +19,10 @@ def naoFragmentado_todasAnalises(k):
 
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
 
-    directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
+    # directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
 
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # if not os.path.exists(directory):
+    #     os.makedirs(directory)
 
     file_number_rows = len(open(filename).readlines())
 
@@ -33,7 +33,7 @@ def naoFragmentado_todasAnalises(k):
     file_number_row_current += len(df)
     percentual = file_number_row_current * 100 / file_number_rows
 
-    json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
+    # json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
 
     saidaEstado = {}
 
@@ -70,10 +70,10 @@ def naoFragmentado_todasAnalises(k):
         saidaEstado[e].update(saidaCidade);
 
     jsonData = json.dumps(saidaEstado)
-    with open(directory+'/_resultado.json', 'w') as f:
-        json.dump(jsonData, f)
+    # with open(directory+'/_resultado.json', 'w') as f:
+    #     json.dump(jsonData, f)
 
-    os.rename(directory, directory[:-8]) #remover '.pending'
+    # os.rename(directory, directory[:-8]) #remover '.pending'
 
 
 def fragmentado_todasAnalises(k, chunksize=10 ** 4):
@@ -81,12 +81,11 @@ def fragmentado_todasAnalises(k, chunksize=10 ** 4):
     minPts = 5
 
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-    # filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv'
 
-    directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
+    # directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
 
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # if not os.path.exists(directory):
+    #     os.makedirs(directory)
 
     file_number_rows = len(open(filename).readlines())
 
@@ -97,7 +96,7 @@ def fragmentado_todasAnalises(k, chunksize=10 ** 4):
         file_number_row_current += len(df)
         percentual = file_number_row_current * 100 / file_number_rows
 
-        json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
+        # json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
 
         saidaEstado = {}
 
@@ -134,10 +133,10 @@ def fragmentado_todasAnalises(k, chunksize=10 ** 4):
             saidaEstado[e].update(saidaCidade);
 
     jsonData = json.dumps(saidaEstado)
-    with open(directory+'/_resultado.json', 'w') as f:
-        json.dump(jsonData, f)
+    # with open(directory+'/_resultado.json', 'w') as f:
+    #     json.dump(jsonData, f)
 
-    os.rename(directory, directory[:-8]) #remover '.pending'
+    # os.rename(directory, directory[:-8]) #remover '.pending'
 
 
 def naoFragmentado_semAnalises(k):
@@ -145,12 +144,11 @@ def naoFragmentado_semAnalises(k):
     minPts = 5
 
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-    # filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv'
 
-    directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
+    # directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
 
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # if not os.path.exists(directory):
+    #     os.makedirs(directory)
 
     file_number_rows = len(open(filename).readlines())
 
@@ -161,7 +159,7 @@ def naoFragmentado_semAnalises(k):
     file_number_row_current += len(df)
     percentual = file_number_row_current * 100 / file_number_rows
 
-    json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
+    # json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
 
     saidaEstado = {}
 
@@ -198,10 +196,10 @@ def naoFragmentado_semAnalises(k):
         saidaEstado[e].update(saidaCidade);
 
     jsonData = json.dumps(saidaEstado)
-    with open(directory+'/_resultado.json', 'w') as f:
-        json.dump(jsonData, f)
+    # with open(directory+'/_resultado.json', 'w') as f:
+    #     json.dump(jsonData, f)
 
-    os.rename(directory, directory[:-8]) #remover '.pending'
+    # os.rename(directory, directory[:-8]) #remover '.pending'
 
 
 def fragmentado_semAnalises(k, chunksize=10 ** 4):
@@ -209,12 +207,11 @@ def fragmentado_semAnalises(k, chunksize=10 ** 4):
     minPts = 5
 
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-    # filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\dataset.csv'
 
-    directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
+    # directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) +'.pending'
 
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    # if not os.path.exists(directory):
+    #     os.makedirs(directory)
 
     file_number_rows = len(open(filename).readlines())
 
@@ -225,7 +222,7 @@ def fragmentado_semAnalises(k, chunksize=10 ** 4):
         file_number_row_current += len(df)
         percentual = file_number_row_current * 100 / file_number_rows
 
-        json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
+        # json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory+'/_progresso.json', 'w'))
 
         saidaEstado = {}
 
@@ -262,10 +259,10 @@ def fragmentado_semAnalises(k, chunksize=10 ** 4):
             saidaEstado[e].update(saidaCidade);
 
     jsonData = json.dumps(saidaEstado)
-    with open(directory+'/_resultado.json', 'w') as f:
-        json.dump(jsonData, f)
+    # with open(directory+'/_resultado.json', 'w') as f:
+    #     json.dump(jsonData, f)
 
-    os.rename(directory, directory[:-8]) #remover '.pending'
+    # os.rename(directory, directory[:-8]) #remover '.pending'
 
 if __name__ == '__main__':
     print('fragmentado_todasAnalises 2')
@@ -273,36 +270,50 @@ if __name__ == '__main__':
     fragmentado_todasAnalises(3, 10 ** 2)
     print("--- %s seconds ---" % (time.time() - start_time))
 
+    print '\n'
+
     print('fragmentado_todasAnalises 4')
     start_time = time.time()
     fragmentado_todasAnalises(3, 10 ** 4)
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    print '\n'
 
     print('fragmentado_todasAnalises 6')
     start_time = time.time()
     fragmentado_todasAnalises(3, 10 ** 6)
     print("--- %s seconds ---" % (time.time() - start_time))
 
+    print '\n'
+
     print('naoFragmentado_todasAnalises')
     start_time = time.time()
     naoFragmentado_todasAnalises(3)
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    print '\n'
+    print '\n'
 
     print('fragmentado_semAnalises 2')
     start_time = time.time()
     fragmentado_semAnalises(3, 10 ** 2)
     print("--- %s seconds ---" % (time.time() - start_time))
 
+    print '\n'
+
     print('fragmentado_semAnalises 4')
     start_time = time.time()
     fragmentado_semAnalises(3, 10 ** 4)
     print("--- %s seconds ---" % (time.time() - start_time))
 
+    print '\n'
 
     print('fragmentado_semAnalises 6')
     start_time = time.time()
     fragmentado_semAnalises(3, 10 ** 6)
     print("--- %s seconds ---" % (time.time() - start_time))
+
+    print '\n'
 
     print('naoFragmentado_semAnalises')
     start_time = time.time()
