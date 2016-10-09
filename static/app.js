@@ -3,14 +3,60 @@
     angular.module('tcc', ['angular-loading-bar'])
         .controller('MainController', function ($scope, $http) {
 
+            $scope.k = 2
+            consultarEntradas();
+
+            function consultarEntradas() {
+                $http.get('/entradas').success(function (resultado) {
+                    // console.log(resultado);
+                    $scope.entradas = resultado;
+                    // resultado.forEach(function (value, key) {
+                    //     if(value.slice(-7) == 'pending')
+                    //         $scope.pending = resultado[key];
+                    // })
+                });
+            }
+
             $scope.analisar = function () {
-                $http.get('/analisar?k=' + $scope.k).success(function (resultado) {
-                    $scope.estados = resultado;
-                    console.log(resultado);
+                $http.get('/iniciar-analise?k=' + $scope.k).success(function (resultado) {
+                    alert(resultado);
+                    // console.log(resultado);
                     // var items = [];
                     // Object.keys(dados).forEach(function(key) {
                     //   items.push({key: key, value: dados[key]});
                     // });
+                });
+            }
+
+            $scope.consultarAnalises = function () {
+                $http.get('/consultar-analises').success(function (resultado) {
+                    // console.log(resultado);
+                    // resultado.forEach(function (value, key) {
+                    //     if(value.slice(-7) == 'pending')
+                    //         $scope.pending = resultado[key];
+                    // })
+                    $scope.pending = resultado;
+                });
+            }
+
+            $scope.consultarProgresso = function (directory) {
+                $http.get('/consultar-progresso?directory='+directory).success(function (resultado) {
+                    console.log(resultado);
+                    // resultado.forEach(function (value, key) {
+                    //     if(value.slice(-7) == 'pending')
+                    //         $scope.pending = resultado[key];
+                    // })
+                });
+            }
+
+            $scope.consultarResultado = function (directory) {
+                $http.get('/consultar-resultado?directory='+directory).success(function (resultado) {
+                    console.log(resultado);
+                    $scope.estados = resultado;
+                    // resultado.forEach(function (value, key) {
+                    //     if(value.slice(-7) == 'pending')
+                    //         $scope.pending = resultado[key];
+                    // })
                 });
             }
 

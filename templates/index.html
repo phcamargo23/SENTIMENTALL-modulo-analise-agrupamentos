@@ -31,9 +31,32 @@
                         <input type="file" class="form-control-file" id="csv">
                     </div>
                     <div class="form-group">
+                        <label for="objeto">Entradas</label>
+                        <select class="form-control" id="objeto" ng-model="entrada"
+                                ng-options="value for (key, value) in entradas">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <input type="text" class="form-control" id="k" placeholder="Nº de Clusters" ng-model="k">
                     </div>
                     <button type="button" class="btn btn-primary" ng-click="analisar()">Analisar</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="text-align: center">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="objeto">Analises</label>
+                        <select class="form-control" id="objeto" ng-model="analise"
+                                ng-options="value for (key, value) in pending">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="consultarAnalises()">Consultar</button>
+                    <button type="button" class="btn btn-primary" ng-click="consultarProgresso(analise)">Progresso</button>
+                    <button type="button" class="btn btn-primary" ng-click="consultarResultado(analise)">Resultado</button>
                 </form>
             </div>
         </div>
@@ -80,6 +103,7 @@
                         <div id="chart-kmeans" style="width: auto; height: 280px;"></div>
                     </div>
                     <div class="chart-lda" id="2b">
+                        <div id="chart-lda" style="width: auto; height: 280px;"></div>
                     </div>
                     <div class="chart-dbscan" id="3b">
                     </div>
