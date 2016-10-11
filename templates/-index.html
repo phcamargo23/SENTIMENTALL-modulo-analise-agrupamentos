@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app="tcc">
+<head>
+    <meta charset="UTF-8">
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="static/bootstrap/dist/css/bootstrap.min.css"/>
+    <!-- ANGULAR  -->
+    <link rel="stylesheet" href="static/angular-loading-bar/build/loading-bar.min.css"/>
+    <!-- CUSTOM -->
+    <link rel="stylesheet" href="static/style.css"/>
+    <title>TCC</title>
+</head>
+<body ng-controller="MainController">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">
+                    <img alt="SentimentALL: módulo de análise de agrupamentos">
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="starter-template">
+        <div class="row">
+            <div class="col-lg-12" style="text-align: center">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" id="csv">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="text-align: center">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="objeto">Entradas</label>
+                        <select class="form-control" id="objeto" ng-model="entrada"
+                                ng-options="value for (key, value) in entradas">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="k" placeholder="k" ng-model="k">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="k" placeholder="Eps" ng-model="eps">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="k" placeholder="MinPts" ng-model="minPts">
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="analisar()">Analisar</button>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="text-align: center">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="objeto">Analises</label>
+                        <select class="form-control" id="objeto" ng-model="analise"
+                                ng-options="value for (key, value) in pending">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" ng-click="consultarAnalises()">Consultar</button>
+                    <button type="button" class="btn btn-primary" ng-click="consultarProgresso(analise)">Progresso</button>
+                    <button type="button" class="btn btn-primary" ng-click="consultarResultado(analise)">Resultado</button>
+                </form>
+            </div>
+        </div>
+        <div class="row" ng-show="analise != undefined">
+            <div class="col-lg-12" style="text-align: center">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <select class="form-control" id="estado" ng-model="estado"
+                                ng-options="key for (key , value) in estados" ng-change="cidades = estado">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade</label>
+                        <select class="form-control" id="exampleInputName2" ng-model="cidade"
+                                ng-options="key for (key, value) in cidades" ng-change="objetos = cidade">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="objeto">Objeto</label>
+                        <select class="form-control" id="objeto" ng-model="objeto"
+                                ng-options="key for (key, value) in objetos">
+                            <option value="">-</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-success" ng-click="mostrarResultado()">Mostrar resultados</button>
+                </form>
+            </div>
+        </div>
+        <div id="chart-kmeans" style="width: 500px; height: 280px;"></div>
+        <div id="chart-lda" style="width: 500px; height: 280px;"></div>
+        <div id="chart-dbscan" style="width: 500px; height: 280px;"></div>
+    </div>
+</div>
+</body>
+<!-- JQUERY -->
+<script src="static/jquery/dist/jquery.min.js"></script>
+<!-- BOOTSTRAP -->
+<script src="static/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- ANGULAR  -->
+<script src="static/angular/angular.min.js"></script>
+<script src="static/angular-animate/angular-animate.min.js"></script>
+<script src="static/angular-loading-bar/build/loading-bar.min.js"></script>
+<!-- GOOGLE CHARTS-->
+<script type="text/javascript" src="static/google-charts/loader.js"></script>
+<!-- CUSTOM -->
+<script src="static/app.js"></script>
+</html>

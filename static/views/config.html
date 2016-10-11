@@ -1,0 +1,64 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Configuração</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Parâmetros de entrada dos algoritmos
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-lg-2"></div>
+                        <div class="col-lg-6">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>Selecione o conjunto de dados</label>
+                                    <select class="form-control" ng-model="params.dataset"
+                                            ng-options="value for (key, value) in entradas">
+                                        <option value="">-</option>
+                                    </select>
+                                </div>
+                                <h1>k-Means</h1>
+                                <div class="form-group">
+                                    <label>Número de Grupos</label>
+                                    <input class="form-control" placeholder="k" ng-model="params.k">
+                                </div>
+                                <h1>LDA</h1>
+                                <div class="form-group">
+                                    <label>Número de tópicos</label>
+                                    <input class="form-control" placeholder="n" ng-model="params.n">
+                                </div>
+                                <h1>DBSCAN</h1>
+                                <div class="form-group">
+                                    <label>Raio</label>
+                                    <input class="form-control" placeholder="eps" ng-model="params.eps">
+                                </div>
+                                <div class="form-group">
+                                    <label>Número mínimo de pontos</label>
+                                    <input class="form-control" placeholder="minPts" ng-model="params.minPts">
+                                </div>
+                                <button ng-click="analisar()" class="btn btn-default">Iniciar análise</button>
+                                <button type="reset" class="btn btn-default">Resetar</button>
+                            </form>
+                        </div>
+                        <!-- /.col-lg-6 (nested) -->
+                        <div class="col-lg-2"></div>
+
+                    </div>
+                    <!-- /.row (nested) -->
+                </div>
+                <!-- /.panel-body -->
+            </div>
+            <!-- /.panel -->
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+</div>
+<!-- /#page-wrapper -->

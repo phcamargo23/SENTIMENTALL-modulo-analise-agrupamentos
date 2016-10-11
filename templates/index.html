@@ -1,109 +1,133 @@
 <!DOCTYPE html>
 <html lang="pt-br" ng-app="tcc">
+
 <head>
-    <meta charset="UTF-8">
-    <!-- BOOTSTRAP -->
-    <link rel="stylesheet" href="static/bootstrap/dist/css/bootstrap.min.css"/>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SENTIMENTALL: análise de agrupamentos de aspectos</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Morris Charts CSS -->
+    <link href="/static/vendor/morrisjs/morris.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
     <!-- ANGULAR  -->
-    <link rel="stylesheet" href="static/angular-loading-bar/build/loading-bar.min.css"/>
+    <link rel="stylesheet" href="/static/angular-loading-bar/build/loading-bar.min.css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- jQuery -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Morris Charts JavaScript -->
+    <script src="/static/vendor/raphael/raphael.min.js"></script>
+    <script src="/static/vendor/morrisjs/morris.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
+
+    <!-- ANGULAR  -->
+    <script src="/static/angular/angular.min.js"></script>
+    <script src="/static/angular-animate/angular-animate.min.js"></script>
+    <script src="/static/angular-route/angular-route.min.js"></script>
+    <script src="/static/angular-loading-bar/build/loading-bar.min.js"></script>
+    <!-- GOOGLE CHARTS-->
+    <script type="text/javascript" src="/static/google-charts/loader.js"></script>
     <!-- CUSTOM -->
-    <link rel="stylesheet" href="static/style.css"/>
-    <title>TCC</title>
+    <script src="static/app.js"></script>
+
 </head>
-<body ng-controller="MainController">
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    <img alt="SentimentALL: módulo de análise de agrupamentos">
-                </a>
-            </div>
+
+<body>
+<div id="wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/#/">SENTIMENTALL: análise de agrupamentos de aspectos</a>
         </div>
-    </div>
-</nav>
-<div class="container">
-    <div class="starter-template">
-        <div class="row">
-            <div class="col-lg-12" style="text-align: center">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <input type="file" class="form-control-file" id="csv">
-                    </div>
-                    <div class="form-group">
-                        <label for="objeto">Entradas</label>
-                        <select class="form-control" id="objeto" ng-model="entrada"
-                                ng-options="value for (key, value) in entradas">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="k" placeholder="Nº de Clusters" ng-model="k">
-                    </div>
-                    <button type="button" class="btn btn-primary" ng-click="analisar()">Analisar</button>
-                </form>
+        <!-- /.navbar-header -->
+
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li class="sidebar-search">
+                        <div class="input-group custom-search-form">
+                            <input type="text" class="form-control" placeholder="Search...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <!-- /input-group -->
+                    </li>
+                    <li>
+                        <a href="/#/"><i class="fa fa-dashboard fa-fw"></i> Resumo</a>
+                    </li>
+                    <li>
+                        <a href="/#/entrada"><i class="fa fa-table fa-fw"></i> Entrada </a>
+                    </li>
+                    <li>
+                        <a href="/#/configuracao"><i class="fa fa-wrench fa-fw"></i> Configuração </a>
+                    </li>
+                    <li>
+                        <a href="/#/saida"><i class="fa fa-bar-chart-o fa-fw"></i> Saída <span class="fa arrow"></span></a>
+                        <!--
+                        <ul class="nav nav-second-level">
+                            <li>
+                                <a href="buttons.html">K-means</a>
+                            </li>
+                            <li>
+                                <a href="notifications.html">DBSCAN</a>
+                            </li>
+                            <li>
+                                <a href="typography.html">LDA</a>
+                            </li>
+                        </ul>
+                        <!-- /.nav-second-level -->
+                    </li>
+                </ul>
             </div>
+            <!-- /.sidebar-collapse -->
         </div>
-        <div class="row">
-            <div class="col-lg-12" style="text-align: center">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="objeto">Analises</label>
-                        <select class="form-control" id="objeto" ng-model="analise"
-                                ng-options="value for (key, value) in pending">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-primary" ng-click="consultarAnalises()">Consultar</button>
-                    <button type="button" class="btn btn-primary" ng-click="consultarProgresso(analise)">Progresso</button>
-                    <button type="button" class="btn btn-primary" ng-click="consultarResultado(analise)">Resultado</button>
-                </form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12" style="text-align: center">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="estado">Estado</label>
-                        <select class="form-control" id="estado" ng-model="estado"
-                                ng-options="key for (key , value) in estados" ng-change="cidades = estado">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="cidade">Cidade</label>
-                        <select class="form-control" id="exampleInputName2" ng-model="cidade"
-                                ng-options="key for (key, value) in cidades" ng-change="objetos = cidade">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="objeto">Objeto</label>
-                        <select class="form-control" id="objeto" ng-model="objeto"
-                                ng-options="key for (key, value) in objetos">
-                            <option value="">-</option>
-                        </select>
-                    </div>
-                    <button type="button" class="btn btn-success" ng-click="mostrarResultado()">Mostrar resultados</button>
-                </form>
-            </div>
-        </div>
-        <div id="chart-kmeans" style="width: 500px; height: 280px;"></div>
-        <div id="chart-lda" style="width: 500px; height: 280px;"></div>
-        <div id="chart-dbscan" style="width: 500px; height: 280px;"></div>
-    </div>
+        <!-- /.navbar-static-side -->
+    </nav>
+    <div ng-view></div>
 </div>
+<!-- /#wrapper -->
 </body>
-<!-- JQUERY -->
-<script src="static/jquery/dist/jquery.min.js"></script>
-<!-- BOOTSTRAP -->
-<script src="static/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- ANGULAR  -->
-<script src="static/angular/angular.min.js"></script>
-<script src="static/angular-animate/angular-animate.min.js"></script>
-<script src="static/angular-loading-bar/build/loading-bar.min.js"></script>
-<!-- GOOGLE CHARTS-->
-<script type="text/javascript" src="static/google-charts/loader.js"></script>
-<!-- CUSTOM -->
-<script src="static/app.js"></script>
+
 </html>
