@@ -16,7 +16,7 @@ def analisar(entrada, k, n, eps, minPts):
     if not os.path.exists('input'):
         os.makedirs('input')
 
-    filename = '/input/' + entrada
+    filename = 'input\\' + entrada
 
     directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) + '.pending'
 
@@ -28,7 +28,7 @@ def analisar(entrada, k, n, eps, minPts):
     file_number_row_current = 0
     percentual = 0
 
-    for df in pd.read_csv(filename, delimiter=';', names=dfHeader, chunksize=10 ** 3):
+    for df in pd.read_csv(filename, delimiter=';', names=dfHeader, chunksize=10 ** 2):
         file_number_row_current += len(df)
         percentual = file_number_row_current * 100 / file_number_rows
 
@@ -83,21 +83,26 @@ def index():
 
 @app.route('/resumo')
 def consultarResumo():
-    retorno = {'entradas': {},
-               'saidas':
-                   {'pendentes': {}, 'concluidos': {}, 'erro': {}}
-               }
+    # retorno = {'entradas': {},
+    #            'saidas':
+    #                {'pendentes': {}, 'concluidos': {}, 'erro': {}}
+    #            }
 
     # for i in os.listdir('input'):
     #     retorno['entradas'].append(i)
 
-    retorno['entradas'] = os.listdir('input')
+    # retorno['entradas'] = os.listdir('input')
+    #
+    # for o in os.listdir('output'):
+    #     if o[-7:] == 'pending':
+    #         retorno['saidas']['pendentes'][o] = consultarProgresso(o)
+    #     else:
+    #         retorno['saidas']['concluidos'][o] = consultarProgresso(o)
+
+    retorno = {}
 
     for o in os.listdir('output'):
-        if o[-7:] == 'pending':
-            retorno['saidas']['pendentes'][o] = consultarProgresso(o)
-        else:
-            retorno['saidas']['concluidos'][o] = consultarProgresso(o)
+        retorno[o] = consultarProgresso(o)
 
     return json.dumps(retorno)
 
@@ -132,7 +137,7 @@ def consultarResultado():
 
 @app.route('/iniciar-analise')
 def main():
-    entrada = request.args.get('entrada')
+    entrada = str(request.args.get('entrada'))
     k = int(request.args.get('k'))
     n = int(request.args.get('n'))
     eps = float(request.args.get('eps'))

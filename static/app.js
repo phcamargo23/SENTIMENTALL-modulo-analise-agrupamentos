@@ -34,7 +34,8 @@ myApp.controller('MainController', function ($scope, $http) {
             method: "GET"
         }).success(function (resultado) {
             // alert(resultado);
-            console.log(resultado);
+            // console.log(resultado);
+            $scope.resumo = resultado;
         });
     }
 
@@ -70,6 +71,7 @@ myApp.controller('ConfigController', function ($scope, $http) {
     }
 
     $scope.analisar = function () {
+        console.log($scope.params.dataset);
         $http({
             url: '/iniciar-analise',
             method: "GET",
