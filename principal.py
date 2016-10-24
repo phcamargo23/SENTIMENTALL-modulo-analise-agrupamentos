@@ -8,31 +8,34 @@ from time import gmtime, strftime
 
 app = Flask(__name__)
 
-directory = None
-
 
 def analisar(entrada, k, n, eps, minPts):
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-    if not os.path.exists('input'):
-        os.makedirs('input')
+    input_dir = 'input/' + entrada
+    output_dir = 'output/' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) + '.pending'
+    progress = 0
 
-    filename = 'input\\' + entrada
+    def preparar():
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
 
-    directory = 'output\\' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) + '.pending'
+    def atualizarProgresso(progress):
+        input_number_rows = len(open(input_dir).readlines())
+        percentual = progress * 100 / input_number_rows
 
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+        data = {
+            'total': input_number_rows,
+            'progress': progress,
+            'percentual': percentual
+        }
 
-    file_number_rows = len(open(filename).readlines())
+        json.dump(data, open(output_dir + '/_progresso.json', 'w'))
 
-    file_number_row_current = 0
-    percentual = 0
+    preparar()
 
-    for df in pd.read_csv(filename, delimiter=';', names=dfHeader, chunksize=10 ** 2):
-        file_number_row_current += len(df)
-        percentual = file_number_row_current * 100 / file_number_rows
-
-        json.dump({'total': file_number_rows, 'progresso': file_number_row_current, 'percentual': percentual}, open(directory + '/_progresso.json', 'w'))
+    for df in pd.read_csv(input_dir, delimiter=';', names=dfHeader, chunksize=10 ** 2):
+        progress += len(df)
+        atualizarProgresso(progress)
 
         saidaEstado = {}
 
@@ -47,7 +50,7 @@ def analisar(entrada, k, n, eps, minPts):
             saidaCidade = {}
 
             for c in subconjuntoEstado.cidade.unique():
-                subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c];
+                subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
                 saidaCidade[c] = {
                     'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
                     'lda': processamento.processarLDA(subconjuntoCidade, n),
@@ -57,22 +60,23 @@ def analisar(entrada, k, n, eps, minPts):
                 saidaObjeto = {};
 
                 for o in subconjuntoCidade.objeto.unique():
-                    subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o];
+                    subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
                     saidaObjeto[o] = {
                         'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
                         'lda': processamento.processarLDA(subconjunto_objeto, n),
                         'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                     }
 
-                saidaCidade[c].update(saidaObjeto);
+                saidaCidade[c].update(saidaObjeto)
 
-            saidaEstado[e].update(saidaCidade);
+            saidaEstado[e].update(saidaCidade)
 
     jsonData = json.dumps(saidaEstado)
-    with open(directory + '/_resultado.json', 'w') as f:
+
+    with open(output_dir + '/_resultado.json', 'w') as f:
         json.dump(jsonData, f)
 
-    os.rename(directory, directory[:-8])  # remover '.pending'
+    os.rename(output_dir, output_dir[:-8])  # remover '.pending'
 
 
 @app.route('/')
@@ -154,4 +158,10 @@ def consultarEntradas():
 
 
 if __name__ == '__main__':
+    if not os.path.exists('input'):
+        os.makedirs('input')
+
+    if not os.path.exists('output'):
+        os.makedirs('output')
+
     app.run()

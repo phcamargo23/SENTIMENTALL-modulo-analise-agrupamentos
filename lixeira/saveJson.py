@@ -1,39 +1,36 @@
-import json
+from flask import Flask, render_template, json
 
-data = {
-    "FirstName": "Bhairav",
-    "MiddleName": "S",
-    "LastName": "Ram",
-    "DateOfBirth": "09-01-1984",
-    "Contact": {
-        "Phone": 9988776655,
-        "Email": "bhairav@gmail.com"
-    },
-    "Address": [
-        {
-            "Type": "Office",
-            "ZipNumber": 560056,
-            "Street": "Nagarbhavi Road",
-            "City": "Bangalore",
-            "Country": "India"
-        },
-        {
-            "Type": "Home",
-            "ZipNumber": 560004,
-            "Street": "Gandhi Bazaar Road",
-            "City": "Bangalore",
-            "Country": "India"
-        }
-    ]
-}
+# Initialize the Flask application
+app = Flask(__name__)
 
-# json.dumps() method turns a Python data structure into JSON:
-jsonData = json.dumps(data)
-print(jsonData)
+if __name__ == '__main__':
+    # with open('../input/dataset.csv') as f:
+        # data = json.load(f)
+        # data = f.readlines()
+        # f.write("appended text")
 
-# Writing JSON data into a file called JSONData.json
-# Use the method called json.dump()
-# It's just dump() and not dumps()
-# Encode JSON data
-with open('JSONData.json', 'w') as f:
-    json.dump(jsonData, f)
+    # data.update(saidaEstado);
+    #
+    # with open(output_dir + '/_resultado.json', 'w') as f:
+    #     json.dump(data, f)
+
+
+    # obj = [[1, 2, 3], 123, 123.123, 'abc', {'key1': (1, 2, 3), 'key2': (4, 5, 6)}]
+    #
+    # # Convert python object to json
+    # json_string = json.dumps(obj)
+    # print 'Json: %s' % json_string
+    #
+    # open('_resultado.json', 'w').write(json_string)
+    # json_string = open('_resultado.json').read()
+    #
+    # # Convert json to python object
+    # new_obj = json.loads(json_string)
+    # print 'Python obj: ', new_obj
+    #
+    # # Render template
+    # # return render_template('index.html', json=json_string, obj=new_obj)
+
+    obj = [[1, 2, 3], 123, 123.123, 'abc', {'key1': (1, 2, 3), 'key2': (4, 5, 6)}]
+    json_string = json.dumps(obj)
+    open('../input/dataset.csv', 'a').write(json_string)
