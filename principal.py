@@ -33,43 +33,44 @@ def analisar(entrada, k, n, eps, minPts):
 
     preparar()
 
-    for df in pd.read_csv(input_dir, delimiter=';', names=dfHeader, chunksize=10 ** 2):
-        progress += len(df)
-        atualizarProgresso(progress)
+    # for df in pd.read_csv(input_dir, delimiter=';', names=dfHeader, chunksize=10 ** 2):
+    df = pd.read_csv(input_dir, delimiter=';', names=dfHeader)
+    progress += len(df)
+    atualizarProgresso(progress)
 
-        saidaEstado = {}
+    saidaEstado = {}
 
-        for e in df.estado.unique():
-            subconjuntoEstado = df[df.estado == e]
-            saidaEstado[e] = {
-                'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
-                'lda': processamento.processarLDA(subconjuntoEstado, n),
-                'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
+    for e in df.estado.unique():
+        subconjuntoEstado = df[df.estado == e]
+        saidaEstado[e] = {
+            'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
+            'lda': processamento.processarLDA(subconjuntoEstado, n),
+            # 'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
+        }
+
+        saidaCidade = {}
+
+        for c in subconjuntoEstado.cidade.unique():
+            subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
+            saidaCidade[c] = {
+                'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
+                'lda': processamento.processarLDA(subconjuntoCidade, n),
+                # 'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
             }
 
-            saidaCidade = {}
+            saidaObjeto = {};
 
-            for c in subconjuntoEstado.cidade.unique():
-                subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
-                saidaCidade[c] = {
-                    'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
-                    'lda': processamento.processarLDA(subconjuntoCidade, n),
-                    'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
+            for o in subconjuntoCidade.objeto.unique():
+                subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
+                saidaObjeto[o] = {
+                    'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
+                    'lda': processamento.processarLDA(subconjunto_objeto, n),
+                    # 'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                 }
 
-                saidaObjeto = {};
+            saidaCidade[c].update(saidaObjeto)
 
-                for o in subconjuntoCidade.objeto.unique():
-                    subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
-                    saidaObjeto[o] = {
-                        'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
-                        'lda': processamento.processarLDA(subconjunto_objeto, n),
-                        'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
-                    }
-
-                saidaCidade[c].update(saidaObjeto)
-
-            saidaEstado[e].update(saidaCidade)
+        saidaEstado[e].update(saidaCidade)
 
     jsonData = json.dumps(saidaEstado)
 

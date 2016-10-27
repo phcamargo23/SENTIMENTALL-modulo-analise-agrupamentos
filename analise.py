@@ -20,7 +20,7 @@ def LDA(conjunto_de_dados, n_topicos):
 
 
 def DBSCAN(conjunto_de_dados, eps, minPts):
-    dbscan = DensityBasedSpatialClustering(eps=eps, min_samples=minPts)
+    dbscan = DensityBasedSpatialClustering(eps=eps, min_samples=minPts, algorithm='ball_tree')
     dbscan.fit(conjunto_de_dados)
 
     return dbscan.labels_, dbscan.core_sample_indices_

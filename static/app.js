@@ -164,9 +164,9 @@ myApp.controller('OutputController', function ($scope, $http) {
     }
 
     function gerarTreeMapLDA(dados) {
-        if (dados == null) {
-            alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
-        }
+        // if (dados == null) {
+        //     alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+        // }
         google.charts.load('current', {'packages': ['treemap']});
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
@@ -195,9 +195,9 @@ myApp.controller('OutputController', function ($scope, $http) {
     }
 
     function gerarTreeMapDBSCAN(dados) {
-        if (dados == null) {
-            alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
-        }
+        // if (dados == null) {
+        //     alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+        // }
         google.charts.load('current', {'packages': ['treemap']});
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
