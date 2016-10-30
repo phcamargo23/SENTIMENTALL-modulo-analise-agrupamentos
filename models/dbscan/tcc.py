@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-from sklearn.cluster import DBSCAN
-import pandas as pd
 import numpy as np
+import pandas as pd
+from sklearn.cluster import DBSCAN
 from sklearn.cluster import DBSCAN as DensityBasedSpatialClustering
-import preProcessamento
+
+from lixeira import preProcessamento2
 
 dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
 filename = '../../input/dataset_100.csv'
@@ -21,8 +22,8 @@ def processarDBSCAN(subset, eps, minPts):
     visualizacao.append(['core', None, 0])
 
     dfSubconjunto = subset
-    setCaracteristicas = preProcessamento.extrairCaracteristicas(dfSubconjunto)
-    listSubconjuntoTransformado = preProcessamento.processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
+    setCaracteristicas = preProcessamento2.extrairCaracteristicas(dfSubconjunto)
+    listSubconjuntoTransformado = preProcessamento2.processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
     resultado, core_points_index = DBSCAN(listSubconjuntoTransformado, eps, minPts)
 
     # centroides = []
