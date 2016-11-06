@@ -87,7 +87,7 @@ def processarDBSCAN(subset, eps, minPts):
     # centroides = []
 
     for point_index in core_points_index:
-        linhaGrupo = [str(point_index), 'core', 0]
+        linhaGrupo = [str(point_index), 'clusters', 0]
         visualizacao.append(linhaGrupo)
         sample_indexes = np.where(resultado == resultado[point_index]) #recuperar indices das amostras do grupo do core point
         df_samples = pd.DataFrame(listSubconjuntoTransformado) #transformar em DataFrame

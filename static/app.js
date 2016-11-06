@@ -6,7 +6,7 @@ var myApp = angular.module('tcc', [
 
 myApp.config(['$routeProvider',
     function ($routeProvider) {
-        $routeProvider.when('/', {
+        $routeProvider.when('/home', {
             templateUrl: '/static/views/index.html',
             controller: 'MainController'
         }).when('/entrada', {
@@ -19,7 +19,7 @@ myApp.config(['$routeProvider',
             templateUrl: '../static/views/output.html',
             controller: 'OutputController'
         }).otherwise({
-            redirectTo: '/'
+            redirectTo: '/home/'
         });
     }]);
 
@@ -39,15 +39,15 @@ myApp.controller('MainController', function ($scope, $http) {
     }
 
     // console.log('safsdfsafsadf');
-    $scope.consultarProgresso = function (directory) {
-        $http.get('/consultar-progresso?directory=' + directory).success(function (resultado) {
-            console.log(resultado);
-            // resultado.forEach(function (value, key) {
-            //     if(value.slice(-7) == 'pending')
-            //         $scope.pending = resultado[key];
-            // })
-        });
-    }
+    // $scope.consultarProgresso = function (directory) {
+    //     $http.get('/consultar-progresso?directory=' + directory).success(function (resultado) {
+    //         console.log(resultado);
+    //         // resultado.forEach(function (value, key) {
+    //         //     if(value.slice(-7) == 'pending')
+    //         //         $scope.pending = resultado[key];
+    //         // })
+    //     });
+    // }
 
 });
 
@@ -57,6 +57,14 @@ myApp.controller('InputController', function ($scope, $http) {
 });
 
 myApp.controller('ConfigController', function ($scope, $http) {
+
+    $scope.params = {};
+    $scope.params.dataset = 'dataset_100.csv';
+    $scope.params.k = 2;
+    $scope.params.n = 3;
+    $scope.params.minPts = 2;
+    $scope.params.eps = 2;
+
     consultarEntradas();
 
     function consultarEntradas() {
@@ -71,9 +79,9 @@ myApp.controller('ConfigController', function ($scope, $http) {
     }
 
     $scope.analisar = function () {
-        console.log($scope.params.dataset);
+        // console.log($scope.params.dataset);
         $http({
-            url: '/iniciar-analise',
+            url: '/iniciar',
             method: "GET",
             params: {'entrada': $scope.params.dataset, 'k': $scope.params.k, 'n': $scope.params.n, 'eps': $scope.params.eps, 'minPts': $scope.params.minPts}
         }).success(function (resultado) {
@@ -85,10 +93,10 @@ myApp.controller('ConfigController', function ($scope, $http) {
 
 myApp.controller('OutputController', function ($scope, $http) {
 
-    consultarAnalises();
+    consultarResultados();
 
-    function consultarAnalises() {
-        $http.get('/consultar-analises').success(function (resultado) {
+    function consultarResultados() {
+        $http.get('/resultados').success(function (resultado) {
             // console.log(resultado);
             // resultado.forEach(function (value, key) {
             //     if(value.slice(-7) == 'pending')
@@ -99,7 +107,9 @@ myApp.controller('OutputController', function ($scope, $http) {
     }
 
     $scope.consultarResultado = function (directory) {
-        $http.get('/consultar-resultado?directory=' + directory).success(function (resultado) {
+        // $http.get('/resultado?directory=' + Object.keys(directory)[0]).success(function (resultado) {
+        // console.log(directory);
+        $http.get('/resultado?directory=' + directory).success(function (resultado) {
             // console.log(resultado);
             $scope.estados = resultado;
             // resultado.forEach(function (value, key) {

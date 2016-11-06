@@ -11,8 +11,8 @@
             <form class="form-inline">
                 <div class="form-group">
                     <label>Selecione o conjunto de dados</label>
-                    <select class="form-control" ng-model="saida" ng-change="consultarResultado(saida)"
-                            ng-options="value for (key, value) in saidas">
+                    <select class="form-control" ng-model="saida" ng-change="consultarResultado(saida.analise.id)"
+                            ng-options="key for (key , value) in saidas">
                         <option value="">-</option>
                     </select>
                     <label for="estado">Estado</label>

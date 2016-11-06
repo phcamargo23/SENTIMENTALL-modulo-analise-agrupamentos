@@ -24,6 +24,7 @@ def analisar(entrada, k, n, eps, minPts):
     def atualizarProgresso(progresso, primeiraIteracao=False):
         if primeiraIteracao:
             qtd_linhas = len(open(input_dir).readlines())
+            # qtd_linhas = df.size
             total = df.estado.unique().size
 
             obj = {
@@ -38,6 +39,7 @@ def analisar(entrada, k, n, eps, minPts):
                     'qtd_linhas': qtd_linhas
                 },
                 'analise': {
+                    'id':output_dir[7:-8],
                     'progresso': progresso,
                     'total': total,
                     'percentual': 0
@@ -51,7 +53,7 @@ def analisar(entrada, k, n, eps, minPts):
             obj = json.loads(json_string)  # transforma em object
 
             obj['analise']['progresso'] = progresso
-            obj['analise']['percentual'] = obj['analise']['total'] / progresso * 100
+            obj['analise']['percentual'] = float(progresso) / float(obj['analise']['total']) * 100
 
             json_string = json.dumps(obj)  # transforma em string
             open(output_dir + '/_progresso.json', 'w').write(json_string)
@@ -117,31 +119,7 @@ def analisar(entrada, k, n, eps, minPts):
     finalizar(saidaEstado)
 
 
-@app.route('/')
-def index():
-    return send_file("templates/index.html")
-
-
-@app.route('/resumo')
-def consultarResumo():
-    retorno = {}
-
-    for o in os.listdir('output'):
-        retorno[o] = consultarProgresso(o)
-
-    return json.dumps(retorno)
-
-
-@app.route('/consultar-analises')
-def consultarAnalises():
-    # for dir in os.listdir('output'):
-    #     if dir[-7:] == 'pending':
-    #         print dir
-    #
-    return json.dumps(os.listdir('output'))
-
-
-@app.route('/consultar-progresso')
+# @app.route('/consultar-progresso')
 def consultarProgresso(directory):
     # directory = str(request.args.get('directory'))
     with open('output/' + directory + '/_progresso.json', 'r') as f:
@@ -151,7 +129,30 @@ def consultarProgresso(directory):
     return data
 
 
-@app.route('/consultar-resultado')
+@app.route('/resumo')
+def consultarResumo():
+    retorno = {}
+
+    for dir in os.listdir('output'):
+        if dir[-7:] == 'pending':
+            retorno[dir] = consultarProgresso(dir)
+
+    return json.dumps(retorno)
+
+
+@app.route('/resultados')
+def consultarResultados():
+    # retorno = dict.fromkeys(os.listdir('output'))
+    retorno = {}
+
+    for dir in os.listdir('output'):
+        if dir[-7:] != 'pending':
+            retorno[dir] = consultarProgresso(dir)
+
+    return json.dumps(retorno)
+
+
+@app.route('/resultado')
 def consultarResultado():
     directory = str(request.args.get('directory'))
     with open('output/' + directory + '/_resultado.json', 'r') as f:
@@ -160,7 +161,7 @@ def consultarResultado():
     return data
 
 
-@app.route('/iniciar-analise')
+@app.route('/iniciar')
 def main():
     entrada = str(request.args.get('entrada'))
     k = int(request.args.get('k'))
@@ -176,6 +177,11 @@ def main():
 @app.route('/entradas')
 def consultarEntradas():
     return json.dumps(os.listdir('input'))
+
+
+@app.route('/')
+def index():
+    return send_file("templates/index.html")
 
 
 if __name__ == '__main__':
