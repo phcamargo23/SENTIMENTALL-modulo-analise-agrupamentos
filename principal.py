@@ -5,6 +5,7 @@ import pandas as pd
 import processamento
 from threading import Thread
 from time import gmtime, strftime
+import time
 
 app = Flask(__name__)
 
@@ -13,31 +14,69 @@ def analisar(entrada, k, n, eps, minPts):
     dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
     input_dir = 'input/' + entrada
     output_dir = 'output/' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) + '.pending'
-    progress = 0
 
     def preparar():
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-    def atualizarProgresso(progress):
-        input_number_rows = len(open(input_dir).readlines())
-        percentual = progress * 100 / input_number_rows
+        atualizarProgresso(0, True)
 
-        data = {
-            'total': input_number_rows,
-            'progress': progress,
-            'percentual': percentual
-        }
+    def atualizarProgresso(progresso, primeiraIteracao=False):
+        if primeiraIteracao:
+            qtd_linhas = len(open(input_dir).readlines())
+            total = df.estado.unique().size
 
-        json.dump(data, open(output_dir + '/_progresso.json', 'w'))
+            obj = {
+                'parametros': {
+                    'k': k,
+                    'n': n,
+                    'eps': eps,
+                    'minPts': minPts
+                },
+                'dataset': {
+                    'entrada': entrada,
+                    'qtd_linhas': qtd_linhas
+                },
+                'analise': {
+                    'progresso': progresso,
+                    'total': total,
+                    'percentual': 0
+                }
+            }
 
-    preparar()
+            json_string = json.dumps(obj)  # transforma em string
+            open(output_dir + '/_progresso.json', 'w').write(json_string)
+        else:
+            json_string = open(output_dir + '/_progresso.json').read()  # carrega arquivo json
+            obj = json.loads(json_string)  # transforma em object
 
-    # for df in pd.read_csv(input_dir, delimiter=';', names=dfHeader, chunksize=10 ** 2):
+            obj['analise']['progresso'] = progresso
+            obj['analise']['percentual'] = obj['analise']['total'] / progresso * 100
+
+            json_string = json.dumps(obj)  # transforma em string
+            open(output_dir + '/_progresso.json', 'w').write(json_string)
+
+    def finalizar(obj):
+        jsonData = json.dumps(obj)
+
+        with open(output_dir + '/_resultado.json', 'w') as f:
+            json.dump(jsonData, f)
+
+        os.rename(output_dir, output_dir[:-8])  # remover '.pending'
+
+        json_string = open(output_dir[:-8] + '/_progresso.json').read()  # carrega arquivo json
+        obj = json.loads(json_string)  # transforma em object
+
+        obj['analise']['tempo'] = time.time() - start_time
+
+        json_string = json.dumps(obj)  # transforma em string
+        open(output_dir[:-8] + '/_progresso.json', 'w').write(json_string)
+
+        print("--- %s s ---" % (time.time() - start_time))
+
     df = pd.read_csv(input_dir, delimiter=';', names=dfHeader)
-    progress += len(df)
-    atualizarProgresso(progress)
-
+    preparar()
+    progresso = 0
     saidaEstado = {}
 
     for e in df.estado.unique():
@@ -45,7 +84,7 @@ def analisar(entrada, k, n, eps, minPts):
         saidaEstado[e] = {
             'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
             'lda': processamento.processarLDA(subconjuntoEstado, n),
-            # 'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
+            'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
         }
 
         saidaCidade = {}
@@ -55,7 +94,7 @@ def analisar(entrada, k, n, eps, minPts):
             saidaCidade[c] = {
                 'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
                 'lda': processamento.processarLDA(subconjuntoCidade, n),
-                # 'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
+                'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
             }
 
             saidaObjeto = {};
@@ -65,45 +104,26 @@ def analisar(entrada, k, n, eps, minPts):
                 saidaObjeto[o] = {
                     'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
                     'lda': processamento.processarLDA(subconjunto_objeto, n),
-                    # 'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
+                    'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                 }
 
             saidaCidade[c].update(saidaObjeto)
 
         saidaEstado[e].update(saidaCidade)
 
-    jsonData = json.dumps(saidaEstado)
+        progresso += 1
+        atualizarProgresso(progresso)
 
-    with open(output_dir + '/_resultado.json', 'w') as f:
-        json.dump(jsonData, f)
-
-    os.rename(output_dir, output_dir[:-8])  # remover '.pending'
+    finalizar(saidaEstado)
 
 
 @app.route('/')
 def index():
-    # return make_response(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates/index.html')).read())
     return send_file("templates/index.html")
 
 
 @app.route('/resumo')
 def consultarResumo():
-    # retorno = {'entradas': {},
-    #            'saidas':
-    #                {'pendentes': {}, 'concluidos': {}, 'erro': {}}
-    #            }
-
-    # for i in os.listdir('input'):
-    #     retorno['entradas'].append(i)
-
-    # retorno['entradas'] = os.listdir('input')
-    #
-    # for o in os.listdir('output'):
-    #     if o[-7:] == 'pending':
-    #         retorno['saidas']['pendentes'][o] = consultarProgresso(o)
-    #     else:
-    #         retorno['saidas']['concluidos'][o] = consultarProgresso(o)
-
     retorno = {}
 
     for o in os.listdir('output'):
@@ -159,6 +179,9 @@ def consultarEntradas():
 
 
 if __name__ == '__main__':
+    print "--- iniciando... ---"
+    start_time = time.time()
+
     if not os.path.exists('input'):
         os.makedirs('input')
 
@@ -166,3 +189,4 @@ if __name__ == '__main__':
         os.makedirs('output')
 
     app.run()
+    # analisar('dataset_100.csv', 2, 3, 2, 2)

@@ -23,7 +23,6 @@ myApp.config(['$routeProvider',
         });
     }]);
 
-
 myApp.controller('MainController', function ($scope, $http) {
 
     consultarResumo();
@@ -39,6 +38,7 @@ myApp.controller('MainController', function ($scope, $http) {
         });
     }
 
+    // console.log('safsdfsafsadf');
     $scope.consultarProgresso = function (directory) {
         $http.get('/consultar-progresso?directory=' + directory).success(function (resultado) {
             console.log(resultado);

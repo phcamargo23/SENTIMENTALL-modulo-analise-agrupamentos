@@ -18,17 +18,15 @@
                         <thead>
                         <tr>
                             <th>Início</th>
+                            <th>Qtd registros</th>
                             <th>Progresso</th>
-                            <th>Total</th>
-                            <th>%</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="(key, value) in resumo">
                             <td>{{ key }}</td>
-                            <td>{{ value.progresso }}</td>
-                            <td>{{ value.total }}</td>
-                            <td>{{ value.percentual }}</td>
+                            <td>{{ value.analise.progresso }}</td>
+                            <td>{{ value.analise.percentual }}%</td>
                         </tr>
                         </tbody>
                     </table>
