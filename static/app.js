@@ -165,7 +165,7 @@ myApp.controller('OutputController', function ($scope, $http) {
 
             function showFullTooltip(row, size, value) {
                 return '<div style="background:#fd9; padding:10px; border-style:solid">' +
-                    '<span style="font-family:Courier"><b> Cluster ' + data.getValue(row, 0) + '</b> ' + '</span><br>' +
+                    '<span style="font-family:Courier"><b> ' + data.getValue(row, 0) + '</b> ' + '</span><br>' +
                     data.getColumnLabel(2) + ': ' + size + '<br>' +
                     '</div>';
             }
@@ -196,7 +196,7 @@ myApp.controller('OutputController', function ($scope, $http) {
 
             function showFullTooltip(row, size, value) {
                 return '<div style="background:#fd9; padding:10px; border-style:solid">' +
-                    '<span style="font-family:Courier"><b> Cluster ' + data.getValue(row, 0) + '</b> ' + '</span><br>' +
+                    '<span style="font-family:Courier"><b> ' + data.getValue(row, 0) + '</b> ' + '</span><br>' +
                     data.getColumnLabel(2) + ': ' + size + '<br>' +
                     '</div>';
             }
@@ -227,7 +227,7 @@ myApp.controller('OutputController', function ($scope, $http) {
 
             function showFullTooltip(row, size, value) {
                 return '<div style="background:#fd9; padding:10px; border-style:solid">' +
-                    '<span style="font-family:Courier"><b> Cluster ' + data.getValue(row, 0) + '</b> ' + '</span><br>' +
+                    '<span style="font-family:Courier"><b> ' + data.getValue(row, 0) + '</b> ' + '</span><br>' +
                     data.getColumnLabel(2) + ': ' + size + '<br>' +
                     '</div>';
             }
