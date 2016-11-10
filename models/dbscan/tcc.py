@@ -1,20 +1,30 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-from sklearn.cluster import DBSCAN
+# from sklearn.cluster import DBSCAN
 from sklearn.cluster import DBSCAN as DensityBasedSpatialClustering
 
-from lixeira import preProcessamento2
+# from lixeira import preProcessamento2
 
 dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
-filename = '../../input/dataset_100.csv'
+filename = '../../input/dataset_5.csv'
 df = pd.read_csv(filename, delimiter=';', names=dfHeader)
 
 def DBSCAN(conjunto_de_dados, eps, minPts):
     dbscan = DensityBasedSpatialClustering(eps=eps, min_samples=minPts)
     dbscan.fit(conjunto_de_dados)
 
-    return dbscan.labels_, dbscan.core_sample_indices_
+    # Number of clusters in labels, ignoring noise if present.
+    # n_clusters_ = len(set(dbscan.labels_)) - (1 if -1 in dbscan.labels_ else 0)
+    n_clusters_ = set(dbscan.labels_)
+    n_clusters_.discard(-1)
+    # try:
+    #     n_clusters_.remove(-1)
+    # except KeyError:
+    #     print 'Dataset não possui ruídos!'
+    # print n_clusters_
+    # return dbscan.labels_, dbscan.core_sample_indices_
+    return dbscan.labels_, set(dbscan.labels_)
 
 def processarDBSCAN(subset, eps, minPts):
     visualizacao = []
@@ -22,13 +32,21 @@ def processarDBSCAN(subset, eps, minPts):
     visualizacao.append(['core', None, 0])
 
     dfSubconjunto = subset
-    setCaracteristicas = preProcessamento2.extrairCaracteristicas(dfSubconjunto)
-    listSubconjuntoTransformado = preProcessamento2.processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
-    resultado, core_points_index = DBSCAN(listSubconjuntoTransformado, eps, minPts)
+    setCaracteristicas = ['atendimento', 'comida', 'preco']
+    listSubconjuntoTransformado = np.array(
+        [
+            [0,1,2],
+            [0,1,2],
+            [0,1,2],
+            [7,8,9],
+            [7,8,9],
+            [7,8,9],
+    ])
+    resultado, n_clusters = DBSCAN(listSubconjuntoTransformado, eps, minPts)
 
     # centroides = []
 
-    for point_index in core_points_index:
+    for point_index in n_clusters:
         linhaGrupo = [str(point_index), 'core', 0]
         visualizacao.append(linhaGrupo)
         sample_indexes = np.where(resultado == resultado[point_index]) #recuperar indices das amostras do grupo do core point

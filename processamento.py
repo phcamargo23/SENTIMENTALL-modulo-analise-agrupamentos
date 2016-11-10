@@ -59,6 +59,7 @@ def processarKmeans(subset, k):
     resultado = analise.kmeans(listSubconjuntoTransformado, k)
     contribuicao_aspectos = mensurarContribuicao(resultado)
 
+    # Gerar visualização
     for cluster, centroides in zip(range(k), contribuicao_aspectos):
         linhaGrupo = [str(cluster + 1), 'clusters', 0]
         visualizacao.append(linhaGrupo)
@@ -81,6 +82,7 @@ def processarLDA(subset, n_topicos):
     resultado = analise.LDA(listSubconjuntoTransformado, n_topicos)
     contribuicao_aspectos = mensurarContribuicao(resultado)
 
+    # Gerar visualização
     for topico, valores in zip(range(n_topicos), contribuicao_aspectos):
         linhaGrupo = [str(topico + 1), 'tópicos', 0]
         visualizacao.append(linhaGrupo)
@@ -100,26 +102,32 @@ def processarDBSCAN(subset, eps, minPts):
     dfSubconjunto = subset
     setCaracteristicas = extrairCaracteristicas(dfSubconjunto)
     listSubconjuntoTransformado = processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
-    resultado, core_points_index = analise.DBSCAN(listSubconjuntoTransformado, eps, minPts)
+    resultado, n_clusters = analise.DBSCAN(listSubconjuntoTransformado, eps, minPts)
 
-    # centroides = []
+    # Calcular valor do centroide
+    centroides = []
+    for cluster in n_clusters:
+        indices_amostras = np.where(resultado == resultado[cluster]) #recuperar os indices das amostras do grupo do core point
+        df_subconjunto_de_dados = pd.DataFrame(listSubconjuntoTransformado, columns=setCaracteristicas) #transformar em DataFrame
+        df_subconjunto_de_dados = df_subconjunto_de_dados.loc[indices_amostras] #recuperar amostras do grupo do core point através dos índices
 
-    for point_index in core_points_index:
-        linhaGrupo = [str(point_index), 'clusters', 0]
+        centroide = []
+        for caracteristica in df_subconjunto_de_dados:
+            media = df_subconjunto_de_dados[caracteristica].mean()
+            centroide.append(media)
+
+        centroides.append(centroide)
+
+    # Mensurar valor da característica
+    contribuicao_aspectos = mensurarContribuicao(centroides)
+
+    # Gerar visualização
+    for cluster, centroides in zip(n_clusters, contribuicao_aspectos):
+        linhaGrupo = [str(cluster + 1), 'clusters', 0]
         visualizacao.append(linhaGrupo)
-        sample_indexes = np.where(resultado == resultado[point_index]) #recuperar indices das amostras do grupo do core point
-        df_samples = pd.DataFrame(listSubconjuntoTransformado) #transformar em DataFrame
-        df_samples = df_samples.loc[sample_indexes] #recuperar amostras do grupo do core point através dos índices
 
-        for caracteristica, cluster_index in zip(list(setCaracteristicas), df_samples):
-            centroide = df_samples[cluster_index].mean()
-            try:
-                contribuicao = np.around(centroide / df_samples[cluster_index].sum() * 100, 4)
-            except ZeroDivisionError:
-                # print "Unexpected error:", sys.exc_info()[0]
-                contribuicao = 0
-            # linhaAspecto = [aspecto + ' (g' + str(point_index) + ')', str(point_index), centroide]
-            linhaAspecto = [caracteristica + ' (g' + str(point_index) + ')', str(point_index), contribuicao]
+        for aspecto, valor in zip(list(setCaracteristicas), centroides):
+            linhaAspecto = [aspecto + ' (g' + str(cluster + 1) + ')', str(cluster + 1), valor]
             visualizacao.append(linhaAspecto)
 
     return visualizacao
