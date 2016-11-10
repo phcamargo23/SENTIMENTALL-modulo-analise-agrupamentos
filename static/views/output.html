@@ -10,32 +10,32 @@
         <div class="col-lg-12" style="margin-bottom: 10px;">
             <form class="form-inline">
                 <div class="form-group">
-                    <label>Selecione o conjunto de dados</label>
+                    <label>Análise</label>
                     <select class="form-control" ng-model="saida" ng-change="consultarResultado(saida.analise.id)"
                             ng-options="key for (key , value) in saidas">
                         <option value="">-</option>
                     </select>
                     <label for="estado">Estado</label>
-                    <select class="form-control" id="estado" ng-model="estado"
+                    <select class="form-control" ng-model="estado"
                             ng-options="key for (key , value) in estados" ng-change="cidades = estado">
                         <option value="">-</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="cidade">Cidade</label>
-                    <select class="form-control" id="exampleInputName2" ng-model="cidade"
-                            ng-options="key for (key, value) in cidades" ng-change="objetos = cidade">
+                    <select class="form-control" ng-model="cidade"
+                            ng-options="key for (key, value) in filtrarResultados(cidades)" ng-change="objetos = cidade">
                         <option value="">-</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="objeto">Objeto</label>
-                    <select class="form-control" id="objeto" ng-model="objeto"
-                            ng-options="key for (key, value) in objetos">
+                    <select class="form-control" ng-model="objeto"
+                            ng-options="key for (key, value) in filtrarResultados(objetos)">
                         <option value="">-</option>
                     </select>
                 </div>
-                <button type="button" class="btn btn-success" ng-click="mostrarResultado()">Mostrar resultados</button>
+                <button type="button" class="btn btn-success" ng-click="mostrarResultado()">Resultados</button>
             </form>
         </div>
     </div>

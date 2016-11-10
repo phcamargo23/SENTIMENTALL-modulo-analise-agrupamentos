@@ -130,4 +130,4 @@ def processarDBSCAN(subset, eps, minPts):
             linhaAspecto = [aspecto + ' (g' + str(cluster + 1) + ')', str(cluster + 1), valor]
             visualizacao.append(linhaAspecto)
 
-    return visualizacao
+    return visualizacao if len(visualizacao) > 2 else None

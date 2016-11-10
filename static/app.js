@@ -93,9 +93,9 @@ myApp.controller('ConfigController', function ($scope, $http) {
 
 myApp.controller('OutputController', function ($scope, $http) {
 
-    consultarResultados();
+    listarResultados();
 
-    function consultarResultados() {
+    function listarResultados() {
         $http.get('/resultados').success(function (resultado) {
             // console.log(resultado);
             // resultado.forEach(function (value, key) {
@@ -117,6 +117,18 @@ myApp.controller('OutputController', function ($scope, $http) {
             //         $scope.pending = resultado[key];
             // })
         });
+    }
+
+    $scope.filtrarResultados = function(items) {
+        var result = {};
+        angular.forEach(items, function(value, key) {
+            // console.log(key+value);
+            // if (!value.hasOwnProperty('kmeans')) {
+            if (key != 'kmeans' && key != 'lda' && key != 'dbscan') {
+                result[key] = value;
+            }
+        });
+        return result;
     }
 
     $scope.mostrarResultado = function () {
@@ -144,10 +156,14 @@ myApp.controller('OutputController', function ($scope, $http) {
 
     function gerarTreeMapKmeans(dados) {
         if (dados == null) {
-            alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+            // alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+            $('#chart-kmeans').html('O número de amostras do nível em questão deve superior o número de grupos desejados, portanto, nenhum agrupamento foi possível de ser formado.');
         }
-        google.charts.load('current', {'packages': ['treemap']});
-        google.charts.setOnLoadCallback(drawChart);
+        else {
+            google.charts.load('current', {'packages': ['treemap']});
+            google.charts.setOnLoadCallback(drawChart);
+        }
+
         function drawChart() {
             var data = new google.visualization.arrayToDataTable(dados);
 
@@ -175,10 +191,13 @@ myApp.controller('OutputController', function ($scope, $http) {
 
     function gerarTreeMapLDA(dados) {
         // if (dados == null) {
-        //     alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+        //     // alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
+        //     document.getElementById('Nenhum agrupamento formado.')
         // }
-        google.charts.load('current', {'packages': ['treemap']});
-        google.charts.setOnLoadCallback(drawChart);
+        // else {
+            google.charts.load('current', {'packages': ['treemap']});
+            google.charts.setOnLoadCallback(drawChart);
+        // }
         function drawChart() {
             var data = new google.visualization.arrayToDataTable(dados);
 
@@ -205,11 +224,13 @@ myApp.controller('OutputController', function ($scope, $http) {
     }
 
     function gerarTreeMapDBSCAN(dados) {
-        // if (dados == null) {
-        //     alert('O número de registros da seleção em questão deve ser menor que o número de grupos desejados');
-        // }
-        google.charts.load('current', {'packages': ['treemap']});
-        google.charts.setOnLoadCallback(drawChart);
+        if (dados == null) {
+            $('#chart-dbscan').html('Nenhuma amostra satisfaz os parâmetros do DBSCAN, portanto, nenhum agrupamento foi possível de ser formado.');
+        }
+        else {
+            google.charts.load('current', {'packages': ['treemap']});
+            google.charts.setOnLoadCallback(drawChart);
+        }
         function drawChart() {
             var data = new google.visualization.arrayToDataTable(dados);
 
