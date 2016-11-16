@@ -17,7 +17,7 @@
                     </select>
                     <label for="estado">Estado</label>
                     <select class="form-control" ng-model="estado"
-                            ng-options="key for (key , value) in estados" ng-change="cidades = estado">
+                            ng-options="key for (key , value) in filtrarResultados(estados)" ng-change="cidades = estado">
                         <option value="">-</option>
                     </select>
                 </div>

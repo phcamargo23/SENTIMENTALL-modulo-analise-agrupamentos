@@ -27,7 +27,7 @@ myApp.controller('MainController', function ($scope, $http) {
 
     consultarResumo();
 
-    function consultarResumo(){
+    function consultarResumo() {
         $http({
             url: '/resumo',
             method: "GET"
@@ -119,15 +119,28 @@ myApp.controller('OutputController', function ($scope, $http) {
         });
     }
 
-    $scope.filtrarResultados = function(items) {
+    $scope.filtrarResultados = function (items) {
         var result = {};
-        angular.forEach(items, function(value, key) {
-            // console.log(key+value);
-            // if (!value.hasOwnProperty('kmeans')) {
-            if (key != 'kmeans' && key != 'lda' && key != 'dbscan') {
-                result[key] = value;
-            }
+        var items_array = [];
+
+        // angular.forEach(items, function (value, key) {
+        //     if (key != 'kmeans' && key != 'lda' && key != 'dbscan') {
+        //         result[key] = value;
+        //         // console.log(key+'-'+value);
+        //     }
+        // });
+
+        angular.forEach(items, function (value, key) {
+            items_array.push(key);
         });
+
+        items_array.sort();
+
+        items_array.map(function (e) {
+            if (e != 'kmeans' && e != 'lda' && e != 'dbscan')
+                result[e] = items[e];
+        });
+
         return result;
     }
 
@@ -195,8 +208,8 @@ myApp.controller('OutputController', function ($scope, $http) {
         //     document.getElementById('Nenhum agrupamento formado.')
         // }
         // else {
-            google.charts.load('current', {'packages': ['treemap']});
-            google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', {'packages': ['treemap']});
+        google.charts.setOnLoadCallback(drawChart);
         // }
         function drawChart() {
             var data = new google.visualization.arrayToDataTable(dados);

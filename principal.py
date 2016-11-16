@@ -6,6 +6,8 @@ import processamento
 from threading import Thread
 from time import gmtime, strftime
 import time
+import json
+import glob
 
 app = Flask(__name__)
 
@@ -58,30 +60,47 @@ def analisar(entrada, k, n, eps, minPts):
             json_string = json.dumps(obj)  # transforma em string
             open(output_dir + '/_progresso.json', 'w').write(json_string)
 
-    def finalizar(obj):
-        jsonData = json.dumps(obj)
 
-        with open(output_dir + '/_resultado.json', 'w') as f:
-            json.dump(jsonData, f)
+    def salvar(estado, obj):
+        # jsonData = json.dumps(obj)
 
-        os.rename(output_dir, output_dir[:-8])  # remover '.pending'
+        # with open(output_dir + '/'+estado+'.json', 'w') as f:
+        #     json.dump(jsonData, f)
+        json_string = json.dumps(obj)
+        open(output_dir + '/'+estado+'.json', 'w').write(json_string)
 
-        json_string = open(output_dir[:-8] + '/_progresso.json').read()  # carrega arquivo json
+
+    def finalizar():
+        new_output_dir = output_dir[:-8]
+        os.rename(output_dir, new_output_dir)  # remover '.pending'
+
+        read_files = glob.glob(new_output_dir + "/*.json")
+        read_files.pop()  # removendo o arquivo '_progresso.json'
+        output_list = {}
+
+        for f in read_files:
+            with open(f, "rb") as infile:
+                output_list.update(json.load(infile))
+
+        json_string = json.dumps(output_list)  # transforma em string
+        open(new_output_dir + '/_resultado.json', 'w').write(json_string)
+
+        json_string = open(new_output_dir + '/_progresso.json').read()  # carrega arquivo json
         obj = json.loads(json_string)  # transforma em object
 
         obj['analise']['tempo'] = time.time() - start_time
 
         json_string = json.dumps(obj)  # transforma em string
-        open(output_dir[:-8] + '/_progresso.json', 'w').write(json_string)
+        open(new_output_dir + '/_progresso.json', 'w').write(json_string)
 
         print("--- %s s ---" % (time.time() - start_time))
 
     df = pd.read_csv(input_dir, delimiter=';', names=dfHeader)
     preparar()
     progresso = 0
-    saidaEstado = {}
 
     for e in df.estado.unique():
+        saidaEstado = {}
         subconjuntoEstado = df[df.estado == e]
         saidaEstado[e] = {
             'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
@@ -115,13 +134,18 @@ def analisar(entrada, k, n, eps, minPts):
 
         progresso += 1
         atualizarProgresso(progresso)
+        salvar(e, saidaEstado)
 
-    finalizar(saidaEstado)
+    finalizar()
 
 
 # @app.route('/consultar-progresso')
 def consultarProgresso(directory):
     # directory = str(request.args.get('directory'))
+    # with open('output/' + directory + '/_resultado.json', 'r') as f:
+    #     data = json.load(f)
+    #
+    # return json.dumps(data)
     with open('output/' + directory + '/_progresso.json', 'r') as f:
         data = json.load(f)
 
@@ -158,7 +182,7 @@ def consultarResultado():
     with open('output/' + directory + '/_resultado.json', 'r') as f:
         data = json.load(f)
 
-    return data
+    return json.dumps(data)
 
 
 @app.route('/iniciar')
@@ -194,5 +218,5 @@ if __name__ == '__main__':
     if not os.path.exists('output'):
         os.makedirs('output')
 
-    app.run()
-    # analisar('dataset_100.csv', 2, 3, 2, 2)
+    # app.run()
+    analisar('dataset_100.csv', 2, 3, 2, 2)
