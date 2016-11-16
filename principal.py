@@ -8,6 +8,7 @@ from time import gmtime, strftime
 import time
 import json
 import utils
+import sys
 
 app = Flask(__name__)
 
@@ -79,38 +80,52 @@ def analisar(entrada, k, n, eps, minPts):
     progresso = 0
 
     for e in df.estado.unique():
+        # print e + ';null;null;'
+        sys.stdout.write(e + ';null;null;')
         saidaEstado = {}
         subconjuntoEstado = df[df.estado == e]
         saidaEstado[e] = {
             'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
-            # 'lda': processamento.processarLDA(subconjuntoEstado, n),
+            'lda': processamento.processarLDA(subconjuntoEstado, n),
             'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
         }
 
+        # print '|'
         saidaCidade = {}
 
         for c in subconjuntoEstado.cidade.unique():
+            # print e + ';' + c + ';null;'
+            sys.stdout.write(e + ';' + c + ';null;')
             subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
             saidaCidade[c] = {
                 'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
-                # 'lda': processamento.processarLDA(subconjuntoCidade, n),
+                'lda': processamento.processarLDA(subconjuntoCidade, n),
                 'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
             }
+
+            # print '|'
+            # print ''
 
             saidaObjeto = {};
 
             for o in subconjuntoCidade.objeto.unique():
-                # print e+'-'+c+'-'+o
+                # print e + ';' + c + ';' + o + ';'
+                sys.stdout.write(e + ';' + c + ';' + o + ';')
                 subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
                 saidaObjeto[o] = {
                     'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
-                    # 'lda': processamento.processarLDA(subconjunto_objeto, n),
+                    'lda': processamento.processarLDA(subconjunto_objeto, n),
                     'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                 }
+                # print '|'
+                # print ''
 
             saidaCidade[c].update(saidaObjeto)
+            # print '|'
 
         saidaEstado[e].update(saidaCidade)
+        # print '|'
+        # print ''
 
         progresso += 1
         atualizarProgresso(progresso)

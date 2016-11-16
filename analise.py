@@ -3,15 +3,21 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.cluster import DBSCAN as DensityBasedSpatialClustering
 from sklearn.metrics import silhouette_score
-from principal import saida_dir
+# from principal import saida_dir
+import sys
 
 def kmeans(conjunto_de_dados, k):
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(conjunto_de_dados)
 
     if len(kmeans.labels_) > 2:
-        silhouette_avg = silhouette_score(conjunto_de_dados, kmeans.labels_)
-        # print silhouette_avg
+        silhouette_avg = silhouette_score(conjunto_de_dados, kmeans.labels_, sample_size=1024)
+        # print 'kmeans:' + str(silhouette_avg) + ';'
+        # print str(silhouette_avg) + ';'
+        sys.stdout.write(str(silhouette_avg) + ';')
+    else:
+        # print 'kmeans:null;'
+        sys.stdout.write('null;')
 
     return kmeans.cluster_centers_
 
@@ -31,8 +37,13 @@ def DBSCAN(conjunto_de_dados, eps, minPts):
     dbscan.fit(conjunto_de_dados)
 
     if len(set(dbscan.labels_)) > 2:
-        silhouette_avg = silhouette_score(conjunto_de_dados, dbscan.labels_)
-        # print silhouette_avg
+        silhouette_avg = silhouette_score(conjunto_de_dados, dbscan.labels_, sample_size=1024)
+        # print 'dbscan:' + str(silhouette_avg) + ';'
+        # print str(silhouette_avg) + ';'
+        sys.stdout.write(str(silhouette_avg) + ';')
+    else:
+        sys.stdout.write('null;')
+    sys.stdout.write('\n')
 
     n_clusters_ = set(dbscan.labels_)
     n_clusters_.discard(-1)
