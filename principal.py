@@ -13,7 +13,7 @@ app = Flask(__name__)
 
 
 def analisar(entrada, k, n, eps, minPts):
-    dfHeader = ['estado', 'cidade', 'tipo', 'objeto', 'aspectos']
+    dfHeader = ['estado', 'cidade', 'objeto', 'aspectos']
     input_dir = 'input/' + entrada
     output_dir = 'output/' + strftime("%Y-%m-%d_%H.%M.%S", gmtime()) + '.pending'
 
@@ -121,6 +121,7 @@ def analisar(entrada, k, n, eps, minPts):
             saidaObjeto = {};
 
             for o in subconjuntoCidade.objeto.unique():
+                print e+'-'+c+'-'+o
                 subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
                 saidaObjeto[o] = {
                     'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
