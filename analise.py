@@ -3,7 +3,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import LatentDirichletAllocation
 from sklearn.cluster import DBSCAN as DensityBasedSpatialClustering
 from sklearn.metrics import silhouette_score
-# import numpy
+from principal import saida_dir
 
 def kmeans(conjunto_de_dados, k):
     kmeans = KMeans(n_clusters=k)

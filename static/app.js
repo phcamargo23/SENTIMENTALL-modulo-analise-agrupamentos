@@ -59,7 +59,7 @@ myApp.controller('InputController', function ($scope, $http) {
 myApp.controller('ConfigController', function ($scope, $http) {
 
     $scope.params = {};
-    $scope.params.dataset = 'dataset_100.csv';
+    $scope.params.dataset = 'pos_100.csv';
     $scope.params.k = 2;
     $scope.params.n = 3;
     $scope.params.minPts = 2;
