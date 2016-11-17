@@ -214,4 +214,4 @@ if __name__ == '__main__':
         os.makedirs('output')
 
     # app.run()
-    analisar('pos_full.csv', 2, 2, 2, 2)
+    analisar('pos_100.csv', 2, 2, 2, 2)
