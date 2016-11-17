@@ -10,12 +10,12 @@ def kmeans(conjunto_de_dados, k):
     kmeans = KMeans(n_clusters=k)
     kmeans.fit(conjunto_de_dados)
 
-    if len(kmeans.labels_) > 2:
+    try:
         silhouette_avg = silhouette_score(conjunto_de_dados, kmeans.labels_, sample_size=1024)
         # print 'kmeans:' + str(silhouette_avg) + ';'
         # print str(silhouette_avg) + ';'
         sys.stdout.write(str(silhouette_avg) + ';')
-    else:
+    except ValueError:
         # print 'kmeans:null;'
         sys.stdout.write('null;')
 
@@ -36,12 +36,12 @@ def DBSCAN(conjunto_de_dados, eps, minPts):
     dbscan = DensityBasedSpatialClustering(eps=eps, min_samples=minPts)
     dbscan.fit(conjunto_de_dados)
 
-    if len(set(dbscan.labels_)) > 2:
+    try:
         silhouette_avg = silhouette_score(conjunto_de_dados, dbscan.labels_, sample_size=1024)
         # print 'dbscan:' + str(silhouette_avg) + ';'
         # print str(silhouette_avg) + ';'
         sys.stdout.write(str(silhouette_avg) + ';')
-    else:
+    except ValueError:
         sys.stdout.write('null;')
     sys.stdout.write('\n')
 
