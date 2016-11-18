@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import print_function
+# from __future__ import print_function
 import pandas as pd
 
 from sklearn.feature_extraction.text import CountVectorizer
@@ -40,7 +40,7 @@ def print_top_words(model, feature_names, n_top_words):
     print()
 
 dfHeader = ['estado', 'cidade', 'objeto', 'aspectos']
-filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\input\pos_5.csv'
+filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\input\man_10.csv'
 dfSubconjunto = pd.read_csv(filename, delimiter=';', names=dfHeader)
 
 setCaracteristicas = extrairCaracteristicas(dfSubconjunto)
@@ -49,7 +49,7 @@ listSubconjuntoTransformado = processarPonderacaoBinaria(setCaracteristicas, dfS
 
 # n_samples = 2000
 # n_features = 1000
-n_topics = 3
+# n_topics = 2
 n_top_words = 20
 
 # # Use tf (raw term count) features for LDA.
@@ -57,12 +57,18 @@ n_top_words = 20
 # tf_vectorizer = CountVectorizer()
 # tf = tf_vectorizer.fit_transform(data_samples)
 
-print("Fit LDA...")
-lda = LatentDirichletAllocation(n_topics=3, learning_method='online')
+# print dfSubconjunto.aspectos
+
+print "Fit LDA..."
+lda = LatentDirichletAllocation(n_topics=2, learning_method='online')
 # lda.fit(tf)
 lda.fit(listSubconjuntoTransformado)
 
-print("\nTopics in LDA model:")
+# print setCaracteristicas
+
+print "\nTopics in LDA model:"
 # tf_feature_names = tf_vectorizer.get_feature_names()
 tf_feature_names = list(setCaracteristicas)
+print lda.components_
+print tf_feature_names
 print_top_words(lda, tf_feature_names, n_top_words)

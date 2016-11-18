@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 print 'inicio'
 import pyodbc
-cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=PH\SQL;DATABASE=TCC;UID=sa;PWD=123')
+cnxn = pyodbc.connect('DRIVER={SQL Server};SERVER=PH;DATABASE=TCC;UID=sa;PWD=123')
 cursor = cnxn.cursor()
 # cursor.execute("SELECT TOP 100 destinoEstado AS estado, destinoCidade AS cidade, destinoObjeto AS objeto, aspectos FROM avaliacoesDosTop20AspectosPositivos WHERE aspectos IS NOT NULL ORDER BY newid()")
 #
@@ -14,4 +14,9 @@ import pandas as pd
 sql = "SELECT TOP 100 destinoEstado AS estado, destinoCidade AS cidade, destinoObjeto AS objeto, destinoTipo AS tipo, aspectos FROM avaliacoesDosTop20AspectosPositivos WHERE aspectos IS NOT NULL ORDER BY newid()"
 df = pd.read_sql(sql, cnxn)
 
+# df.to_sql('teste', cnxn);
+
 print df
+
+cursor.execute("INSERT INTO teste VALUES('222662')")
+cnxn.commit()
