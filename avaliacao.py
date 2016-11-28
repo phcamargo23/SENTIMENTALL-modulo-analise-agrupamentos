@@ -80,45 +80,41 @@ def analisar(entrada, k, n, eps, minPts):
     progresso = 0
 
     for e in df.estado.unique():
-        sys.stdout.write(e + ';null;null;')
         saidaEstado = {}
         subconjuntoEstado = df[df.estado == e]
-        saidaEstado[e] = {
-            'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
-            'lda': processamento.processarLDA(subconjuntoEstado, n),
-            'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
-        }
 
-        saidaCidade = {}
+        # processamento.processarKmeans(subconjuntoEstado, k)
+        # processamento.processarLDA(subconjuntoEstado, n)
+        processamento.processarLDA_gensim(subconjuntoEstado, n)
+        # processamento.processarDBSCAN(subconjuntoEstado, eps, minPts)
 
-        for c in subconjuntoEstado.cidade.unique():
-            # print e + ';' + c + ';null;'
-            sys.stdout.write(e + ';' + c + ';null;')
-            subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
-            saidaCidade[c] = {
-                'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
-                'lda': processamento.processarLDA(subconjuntoCidade, n),
-                'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
-            }
+        # saidaCidade = {}
+        #
+        # for c in subconjuntoEstado.cidade.unique():
+        #     # print e + ';' + c + ';null;'
+        #     sys.stdout.write(e + ';' + c + ';null;')
+        #     subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
+        #
+        #     processamento.processarKmeans(subconjuntoCidade, k)
+        #     processamento.processarLDA(subconjuntoCidade, n)
+        #     processamento.processarDBSCAN(subconjuntoCidade, eps, minPts)
+        #
+        #     saidaObjeto = {};
+        #
+        #     for o in subconjuntoCidade.objeto.unique():
+        #         sys.stdout.write(e + ';' + c + ';' + o + ';')
+        #         subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
+        #         processamento.processarKmeans(subconjunto_objeto, k)
+        #         processamento.processarLDA(subconjunto_objeto, n)
+        #         processamento.processarDBSCAN(subconjunto_objeto, eps, minPts)
+        #
+        #     saidaCidade[c].update(saidaObjeto)
+        #
+        # saidaEstado[e].update(saidaCidade)
 
-            saidaObjeto = {};
-
-            for o in subconjuntoCidade.objeto.unique():
-                sys.stdout.write(e + ';' + c + ';' + o + ';')
-                subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
-                saidaObjeto[o] = {
-                    'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
-                    'lda': processamento.processarLDA(subconjunto_objeto, n),
-                    'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
-                }
-
-            saidaCidade[c].update(saidaObjeto)
-
-        saidaEstado[e].update(saidaCidade)
-
-        progresso += 1
-        atualizarProgresso(progresso)
-        salvar(e, saidaEstado)
+        # progresso += 1
+        # atualizarProgresso(progresso)
+        # salvar(e, saidaEstado)
 
     finalizar()
 
@@ -204,3 +200,5 @@ if __name__ == '__main__':
 
     # app.run()
     analisar('pos_full.csv', 2, 2, 2, 2)
+    # analisar('pos_sp.csv', 2, 2, 2, 2)
+    # analisar('pos_al_maceio_retaurante-parmegianno.csv', 2, 2, 2, 2)

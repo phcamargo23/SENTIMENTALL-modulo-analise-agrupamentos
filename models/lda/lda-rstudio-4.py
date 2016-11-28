@@ -34,29 +34,34 @@ def processarPonderacaoBinaria(caracteristicas, subconjunto):
     return resultado
 
 
-# dfHeader = ['estado', 'cidade', 'objeto', 'aspectos']
-# filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\input\pos_100.csv'
-# dfSubconjunto = pd.read_csv(filename, delimiter=';', names=dfHeader)
-#
-# setCaracteristicas = extrairCaracteristicas(dfSubconjunto)
-# listSubconjuntoTransformado = processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
-#
-listSubconjuntoTransformado = [
-     [(0, 0)]
-    ,[(0, 0)]
-    ,[(0, 0)]
-]
+dfHeader = ['estado', 'cidade', 'objeto', 'aspectos']
+filename = 'C:\Users\Pedro Henrique\Google Drive\CEULP-ULBRA\TCC II\Lab\input\pos_100.csv'
+dfSubconjunto = pd.read_csv(filename, delimiter=';', names=dfHeader)
 
-# listSubconjuntoTransformado = [
-#  [(0, 1), (1, 1)]
-# ,[(2, 1), (3, 1)]
-# ,[(2, 1)]
-# ,[(0, 1)]
-# ,[(4, 1)]
-# ,[(5, 1)]
-# ,[(5, 1), (6, 1)]
-# ]
+setCaracteristicas = extrairCaracteristicas(dfSubconjunto)
+listSubconjuntoTransformado = processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
+
+dic = []
+
+for l in listSubconjuntoTransformado:
+    dic.append(zip(range(len(setCaracteristicas)), l))
+
+# corpus = [(i,a) for i, a in range(len(setCaracteristicas)), listSubconjuntoTransformado]
 
 # generate LDA model
-ldamodel = gensim.models.ldamodel.LdaModel(listSubconjuntoTransformado, num_topics=3)
-print(ldamodel.print_topics(num_topics=3, num_words=4))
+ldamodel = gensim.models.ldamodel.LdaModel(dic, num_topics=3)
+
+# print ldamodel.show_topics()
+# for t in ldamodel.show_topics():
+#     print t
+
+topicos = []
+for i in range(3):
+    distribuicao = []
+
+    for k in ldamodel.show_topic(i, topn=len(setCaracteristicas)):
+        distribuicao.append(k[1])
+
+    topicos.append(distribuicao)
+
+print topicos

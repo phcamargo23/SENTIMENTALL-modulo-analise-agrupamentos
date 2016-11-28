@@ -56,4 +56,4 @@ corpus = [dictionary.doc2bow(text) for text in texts]
 # generate LDA model
 ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=3, id2word = dictionary, passes=20)
 print(ldamodel.print_topics(num_topics=3, num_words=4))
-#print(ldamodel.show_topics())
+print(ldamodel.show_topics())

@@ -47,11 +47,12 @@ for i in doc_set:
 
 # turn our tokenized documents into a id <-> term dictionary
 dictionary = corpora.Dictionary(texts)
-print dictionary
+# print dictionary
 
 # convert tokenized documents into a document-term matrix
 corpus = [dictionary.doc2bow(text) for text in texts]
-print corpus
+# print corpus
 
 # generate LDA model
 ldamodel = gensim.models.ldamodel.LdaModel(corpus, num_topics=2, id2word = dictionary, passes=20)
+print(ldamodel.print_topics(num_topics=3, num_words=4))

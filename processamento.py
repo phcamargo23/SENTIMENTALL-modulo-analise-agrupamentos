@@ -93,6 +93,33 @@ def processarLDA(subset, n_topicos):
 
     return visualizacao
 
+def processarLDA_gensim(subset, n_topicos):
+    visualizacao = []
+    visualizacao.append(['Nó', 'Pai', 'Contribuição (%)'])
+    visualizacao.append(['tópicos', None, 0])
+
+    dfSubconjunto = subset
+    setCaracteristicas = extrairCaracteristicas(dfSubconjunto)
+    listSubconjuntoTransformado = processarPonderacaoBinaria(setCaracteristicas, dfSubconjunto)
+
+    dic = []
+
+    for l in listSubconjuntoTransformado:
+        dic.append(zip(range(len(setCaracteristicas)), l))
+
+    resultado = analise.LDA_gensim(dic, n_topicos)
+    contribuicao_aspectos = mensurarContribuicao(resultado)
+
+    # Gerar visualização
+    for topico, valores in zip(range(n_topicos), contribuicao_aspectos):
+        linhaGrupo = [str(topico + 1), 'tópicos', 0]
+        visualizacao.append(linhaGrupo)
+
+        for aspecto, valor in zip(list(setCaracteristicas), valores):
+            linhaAspecto = [aspecto + ' (t' + str(topico + 1) + ')', str(topico + 1), valor];
+            visualizacao.append(linhaAspecto)
+
+    return visualizacao
 
 def processarDBSCAN(subset, eps, minPts):
     visualizacao = []
