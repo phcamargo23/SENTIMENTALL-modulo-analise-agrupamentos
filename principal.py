@@ -80,7 +80,6 @@ def analisar(entrada, k, n, eps, minPts):
     progresso = 0
 
     for e in df.estado.unique():
-        # print e + ';null;null;'
         sys.stdout.write(e + ';null;null;')
         saidaEstado = {}
         subconjuntoEstado = df[df.estado == e]
@@ -90,7 +89,6 @@ def analisar(entrada, k, n, eps, minPts):
             'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
         }
 
-        # print '|'
         saidaCidade = {}
 
         for c in subconjuntoEstado.cidade.unique():
@@ -103,13 +101,9 @@ def analisar(entrada, k, n, eps, minPts):
                 'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
             }
 
-            # print '|'
-            # print ''
-
             saidaObjeto = {};
 
             for o in subconjuntoCidade.objeto.unique():
-                # print e + ';' + c + ';' + o + ';'
                 sys.stdout.write(e + ';' + c + ';' + o + ';')
                 subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
                 saidaObjeto[o] = {
@@ -117,15 +111,10 @@ def analisar(entrada, k, n, eps, minPts):
                     'lda': processamento.processarLDA(subconjunto_objeto, n),
                     'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                 }
-                # print '|'
-                # print ''
 
             saidaCidade[c].update(saidaObjeto)
-            # print '|'
 
         saidaEstado[e].update(saidaCidade)
-        # print '|'
-        # print ''
 
         progresso += 1
         atualizarProgresso(progresso)
