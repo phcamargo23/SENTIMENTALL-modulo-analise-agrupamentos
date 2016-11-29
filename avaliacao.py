@@ -64,29 +64,33 @@ def analisar(entrada, k, n, eps, minPts):
         utils.obj2JsonFile(obj, saida_dir + '/' + estado + '.json')
 
     def finalizar():
-        nova_saida_dir = saida_dir[:-8]
-        os.rename(saida_dir, nova_saida_dir)  # remover '.pending'
+        # nova_saida_dir = saida_dir[:-8]
+        # os.rename(saida_dir, nova_saida_dir)  # remover '.pending'
+        #
+        # utils.mergeFilesAndSave(nova_saida_dir, 'json', nova_saida_dir + '/_resultado.json')  # mesclando arquivos
+        #
+        # obj = utils.loadJsonFromFile(nova_saida_dir + '/_progresso.json')
+        # obj['analise']['tempo'] = time.time() - start_time
+        # utils.obj2JsonFile(obj, nova_saida_dir + '/_progresso.json')
 
-        utils.mergeFilesAndSave(nova_saida_dir, 'json', nova_saida_dir + '/_resultado.json')  # mesclando arquivos
-
-        obj = utils.loadJsonFromFile(nova_saida_dir + '/_progresso.json')
-        obj['analise']['tempo'] = time.time() - start_time
-        utils.obj2JsonFile(obj, nova_saida_dir + '/_progresso.json')
-
-        print("--- %s s ---" % (time.time() - start_time))
+        # print("--- %s s ---" % (time.time() - start_time))
+        print(time.time() - start_time)
+        # sys.stdout.write('\n')
 
     df = pd.read_csv(input_dir, delimiter=';', names=dfHeader)
     preparar()
     progresso = 0
 
     for e in df.estado.unique():
+        # sys.stdout.write(e + ';null;null;')
         saidaEstado = {}
         subconjuntoEstado = df[df.estado == e]
-
-        # processamento.processarKmeans(subconjuntoEstado, k)
-        # processamento.processarLDA(subconjuntoEstado, n)
-        processamento.processarLDA_gensim(subconjuntoEstado, n)
-        # processamento.processarDBSCAN(subconjuntoEstado, eps, minPts)
+        saidaEstado[e] = {
+            'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
+            'lda': processamento.processarLDA(subconjuntoEstado, n),
+            # 'lda': processamento.processarLDA_gensim(subconjuntoEstado, n),
+            'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
+        }
 
         # saidaCidade = {}
         #
@@ -94,26 +98,31 @@ def analisar(entrada, k, n, eps, minPts):
         #     # print e + ';' + c + ';null;'
         #     sys.stdout.write(e + ';' + c + ';null;')
         #     subconjuntoCidade = subconjuntoEstado[subconjuntoEstado.cidade == c]
-        #
-        #     processamento.processarKmeans(subconjuntoCidade, k)
-        #     processamento.processarLDA(subconjuntoCidade, n)
-        #     processamento.processarDBSCAN(subconjuntoCidade, eps, minPts)
+        #     saidaCidade[c] = {
+        #         'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
+        #         'lda': processamento.processarLDA(subconjuntoCidade, n),
+        #         # 'lda': processamento.processarLDA_gensim(subconjuntoCidade, n),
+        #         'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
+        #     }
         #
         #     saidaObjeto = {};
         #
         #     for o in subconjuntoCidade.objeto.unique():
         #         sys.stdout.write(e + ';' + c + ';' + o + ';')
         #         subconjunto_objeto = subconjuntoCidade[subconjuntoCidade.objeto == o]
-        #         processamento.processarKmeans(subconjunto_objeto, k)
-        #         processamento.processarLDA(subconjunto_objeto, n)
-        #         processamento.processarDBSCAN(subconjunto_objeto, eps, minPts)
+        #         saidaObjeto[o] = {
+        #             'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
+        #             'lda': processamento.processarLDA(subconjunto_objeto, n),
+        #             # 'lda': processamento.processarLDA_gensim(subconjunto_objeto, n),
+        #             'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
+        #         }
         #
         #     saidaCidade[c].update(saidaObjeto)
-        #
+
         # saidaEstado[e].update(saidaCidade)
 
-        # progresso += 1
-        # atualizarProgresso(progresso)
+        progresso += 1
+        atualizarProgresso(progresso)
         # salvar(e, saidaEstado)
 
     finalizar()
@@ -189,7 +198,6 @@ def index():
 
 
 if __name__ == '__main__':
-    print "--- iniciando... ---"
     start_time = time.time()
 
     if not os.path.exists('input'):
@@ -199,6 +207,8 @@ if __name__ == '__main__':
         os.makedirs('output')
 
     # app.run()
-    analisar('pos_full.csv', 2, 2, 2, 2)
-    # analisar('pos_sp.csv', 2, 2, 2, 2)
-    # analisar('pos_al_maceio_retaurante-parmegianno.csv', 2, 2, 2, 2)
+    analisar('pos_to.csv', 2, 2, 2, 2)
+    analisar('pos_to.csv', 3, 3, 3, 3)
+    analisar('pos_to.csv', 4, 4, 4, 4)
+    analisar('pos_to.csv', 5, 5, 5, 5)
+

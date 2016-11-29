@@ -60,7 +60,7 @@ def DBSCAN(conjunto_de_dados, eps, minPts):
         sys.stdout.write(str(silhouette_avg) + ';')
     except ValueError:
         sys.stdout.write('null;')
-    sys.stdout.write('\n')
+    # sys.stdout.write('\n')
 
     n_clusters_ = set(dbscan.labels_)
     n_clusters_.discard(-1)

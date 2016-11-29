@@ -86,6 +86,7 @@ def analisar(entrada, k, n, eps, minPts):
         saidaEstado[e] = {
             'kmeans': processamento.processarKmeans(subconjuntoEstado, k),
             'lda': processamento.processarLDA(subconjuntoEstado, n),
+            # 'lda': processamento.processarLDA_gensim(subconjuntoEstado, n),
             'dbscan': processamento.processarDBSCAN(subconjuntoEstado, eps, minPts),
         }
 
@@ -98,6 +99,7 @@ def analisar(entrada, k, n, eps, minPts):
             saidaCidade[c] = {
                 'kmeans': processamento.processarKmeans(subconjuntoCidade, k),
                 'lda': processamento.processarLDA(subconjuntoCidade, n),
+                # 'lda': processamento.processarLDA_gensim(subconjuntoCidade, n),
                 'dbscan': processamento.processarDBSCAN(subconjuntoCidade, eps, minPts),
             }
 
@@ -109,6 +111,7 @@ def analisar(entrada, k, n, eps, minPts):
                 saidaObjeto[o] = {
                     'kmeans': processamento.processarKmeans(subconjunto_objeto, k),
                     'lda': processamento.processarLDA(subconjunto_objeto, n),
+                    # 'lda': processamento.processarLDA_gensim(subconjunto_objeto, n),
                     'dbscan': processamento.processarDBSCAN(subconjunto_objeto, eps, minPts),
                 }
 
@@ -203,4 +206,4 @@ if __name__ == '__main__':
         os.makedirs('output')
 
     # app.run()
-    analisar('pos_full.csv', 2, 2, 2, 2)
+    analisar('pos_full-sp-rj.csv', 2, 2, 2, 2)
