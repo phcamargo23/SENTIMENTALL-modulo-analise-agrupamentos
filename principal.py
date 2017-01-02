@@ -205,5 +205,5 @@ if __name__ == '__main__':
     if not os.path.exists('output'):
         os.makedirs('output')
 
-    # app.run()
-    analisar('pos_full-sp-rj.csv', 2, 2, 2, 2)
+    app.run()
+    # analisar('pos_full-sp-rj.csv', 2, 2, 2, 2)
